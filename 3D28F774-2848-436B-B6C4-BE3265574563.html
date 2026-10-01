@@ -1,0 +1,1846 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<style id="lumi-runtime">
+/* luminous.css */
+/*
+ * Luminous runtime stylesheet — injected once into every generated widget's
+ * <head> by the C++ widget agent (id="lumi-runtime"). Single Source of Truth
+ * for ALL design tokens and pre-baked .lumi-* component classes. The SI prompts
+ * (design.md / html_generation.jinja2 / chart.jinja2) must NOT re-declare these
+ * tokens or component CSS; they only reference them.
+ *
+ * Sections:
+ *   1. Web fonts (Google Sans Flex + Google Sans Code)
+ *   2. Light token :root (from previewer tokens.css, verbatim)
+ *   3. Dark token overrides — REMAPPED to :root so canvas/D3 readers of
+ *      getComputedStyle(document.documentElement) resolve dark values (D3).
+ *   4. Short diagram/chart aliases (bridge legacy --surface / --chart-N names).
+ *   5. In-scope pre-baked .lumi-* component classes.
+ */
+
+/* ============================================================
+ * 1. WEB FONTS  (Google Sans Flex + Google Sans Code only)
+ *    Material Symbols Outlined is intentionally NOT loaded: no in-scope
+ *    .lumi-* control has a functional CSS glyph dependency on it, and the
+ *    icon ban forbids decorative icons (Decision D2).
+ * ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:ital,wght@0,300..700;1,300..700&family=Google+Sans+Code:ital,wght,MONO@0,300..700,0..1;1,300..700,0..1&display=swap');
+
+/* ============================================================
+ * 2. LIGHT TOKENS (:root)
+ * ============================================================ */
+:root {
+  --body-bg: transparent;
+  --ff-sans: 'Google Sans Flex', 'Google Sans Text', 'Google Sans', sans-serif;
+  --ff-mono: 'Google Sans Code', 'Google Sans Mono', monospace;
+
+  --lumi-sys-spacing--xxs: 2px;
+  --lumi-sys-spacing--xs: 4px;
+  --lumi-sys-spacing--s: 8px;
+  --lumi-sys-spacing--m: 12px;
+  --lumi-sys-spacing--l: 16px;
+  --lumi-sys-spacing--xl: 20px;
+  --lumi-sys-spacing--xxl: 24px;
+  --lumi-sys-spacing--3xl: 28px;
+  --lumi-sys-spacing--4xl: 36px;
+
+  --lumi-sys-shape--none: 0px;
+  --lumi-sys-shape--extra-small: 4px;
+  --lumi-sys-shape--small: 8px;
+  --lumi-sys-shape--medium: 12px;
+  --lumi-sys-shape--large: 16px;
+  --lumi-sys-shape--large-increased: 20px;
+  --lumi-sys-shape--large-max: 24px;
+  --lumi-sys-shape--xl: 28px;
+  --lumi-sys-shape--xl-increased: 32px;
+  --lumi-sys-shape--xl-max: 40px;
+  --lumi-sys-shape--xxl: 48px;
+  --lumi-sys-shape--xxl-increased: 56px;
+  --lumi-sys-shape--full: 999px;
+
+  --lumi-sys-elevation--level1: 0 0 20px 0 rgba(0, 0, 0, 0.04);
+  --lumi-sys-elevation--level2: 0 0 20px 0 rgba(0, 0, 0, 0.11);
+
+  --lumi-sys-color--surface: #fdfcfc;
+  --lumi-sys-color--surface-dim: #f2f0f0;
+  --lumi-sys-color--surface-bright: #ffffff;
+  --lumi-sys-color--surface-background: #fdfcfc;
+  --lumi-sys-color--surface-accent: #9dd2ff;
+  --lumi-sys-color--surface-container: #f2f0f0;
+  --lumi-sys-color--surface-container-high: #e6e6e6;
+  --lumi-sys-color--surface-translucent: rgba(255, 255, 255, 0.88);
+  --lumi-sys-color--on-surface: #000000;
+  --lumi-sys-color--on-surface-default: #000000;
+  --lumi-sys-color--on-surface-variant: rgba(0, 0, 0, 0.55);
+  --lumi-sys-color--on-surface-de-emphasis: rgba(0, 0, 0, 0.55);
+  --lumi-sys-color--on-surface-low: rgba(0, 0, 0, 0.08);
+  --lumi-sys-color--positive: #008052;
+  --lumi-sys-color--positive-container: #daf9d4;
+  --lumi-sys-color--on-positive-container: #009954;
+  --lumi-sys-color--error: #de2d29;
+  --lumi-sys-color--error-container: #ffdeec;
+  --lumi-sys-color--on-error-container: #de2d29;
+  --lumi-sys-color--accent: #9dd2ff;
+  --lumi-sys-color--accent-container: #dcf1ff;
+  --lumi-sys-color--accent-fixed: #3186ff;
+  --lumi-sys-color--primary: #3186ff;
+  --lumi-sys-color--on-primary: #ffffff;
+  --lumi-sys-color--black: #000000;
+  --lumi-sys-color--white: #ffffff;
+  --lumi-sys-color--outline: #727676;
+  --lumi-sys-color--stroke-default: #e3e3e3;
+
+  --lumi-sys-opacity-state--hover: 0.08;
+  --lumi-sys-opacity-state--focus: 0.08;
+  --lumi-sys-opacity-state--pressed: 0.12;
+  --lumi-sys-opacity-state--disabled: 0.12;
+  --lumi-sys-opacity-state--disabled-label: 0.38;
+
+  --lumi-sys-color--code-background: #000000;
+  --lumi-sys-color--code-primary-text: #ffffff;
+  --lumi-sys-color--code-blue-text: #4fa0ff;
+  --lumi-sys-color--code-green-text: #60d673;
+  --lumi-sys-color--code-grey-text: #808080;
+  --lumi-sys-color--code-pink-text: #ff96da;
+  --lumi-sys-color--code-purple-text: #969dff;
+  --lumi-sys-color--code-red-text: #ff5a59;
+  --lumi-sys-color--code-yellow-text: #ffdb0f;
+
+  --lumi-sys-color--chart-series-1: #2575fc;
+  --lumi-sys-color--chart-series-2: #5b6e9e;
+  --lumi-sys-color--chart-series-3: #228a49;
+  --lumi-sys-color--chart-series-4: #62991b;
+  --lumi-sys-color--chart-series-5: #1e564d;
+  --lumi-sys-color--chart-series-6: #526a45;
+  --lumi-sys-color--chart-series-7: #2780c4;
+  --lumi-sys-color--chart-series-8: #997112;
+  --lumi-sys-color--chart-series-9: #705ec2;
+  --lumi-sys-color--chart-series-10: #c84288;
+}
+
+/* ============================================================
+ * 3. DARK TOKENS  (REMAPPED to :root — Decision D3)
+ *    Canvas / Chart.js / D3 read getComputedStyle(document.documentElement);
+ *    the theme-sync listener sets data-theme="dark" on <html>, so dark values
+ *    MUST live on :root (not scoped to body) to prevent black-chart regressions.
+ * ============================================================ */
+:root[data-theme="dark"],
+body.dark-mode,
+:root[data-theme="dark"] body {
+  --body-bg: #0f0f0f;
+  --lumi-sys-elevation--level1: 0 0 20px 0 rgba(0, 0, 0, 0.28);
+  --lumi-sys-elevation--level2: 0 0 20px 0 rgba(0, 0, 0, 0.40);
+
+  --lumi-sys-color--surface: #0f0f0f;
+  --lumi-sys-color--surface-dim: #141414;
+  --lumi-sys-color--surface-bright: #1c1c1c;
+  --lumi-sys-color--surface-background: #0f0f0f;
+  --lumi-sys-color--surface-accent: #14204f;
+  --lumi-sys-color--surface-container: #141414;
+  --lumi-sys-color--surface-container-high: #1c1c1c;
+  --lumi-sys-color--surface-translucent: rgba(24, 24, 27, 0.88);
+  --lumi-sys-color--on-surface: #e0e0e0;
+  --lumi-sys-color--on-surface-default: #e0e0e0;
+  --lumi-sys-color--on-surface-variant: rgba(255, 255, 255, 0.55);
+  --lumi-sys-color--on-surface-de-emphasis: rgba(255, 255, 255, 0.55);
+  --lumi-sys-color--on-surface-low: rgba(255, 255, 255, 0.12);
+  --lumi-sys-color--positive: #0ebc5f;
+  --lumi-sys-color--positive-container: #002220;
+  --lumi-sys-color--on-positive-container: #0ebc5f;
+  --lumi-sys-color--error: #ff4c45;
+  --lumi-sys-color--error-container: #3c0202;
+  --lumi-sys-color--on-error-container: #ff4c45;
+  --lumi-sys-color--accent: #1f3b9b;
+  --lumi-sys-color--accent-container: #192967;
+  --lumi-sys-color--accent-fixed: #3186ff;
+  --lumi-sys-color--primary: #9dd2ff;
+  --lumi-sys-color--on-primary: #192967;
+  --lumi-sys-color--black: #000000;
+  --lumi-sys-color--white: #ffffff;
+  --lumi-sys-color--outline: #9a9b9c;
+  --lumi-sys-color--stroke-default: #2d2f38;
+
+  --lumi-sys-color--code-background: #141414;
+  --lumi-sys-color--code-primary-text: #ffffff;
+  --lumi-sys-color--code-blue-text: #4fa0ff;
+  --lumi-sys-color--code-green-text: #60d673;
+  --lumi-sys-color--code-grey-text: #808080;
+  --lumi-sys-color--code-pink-text: #ff96da;
+  --lumi-sys-color--code-purple-text: #969dff;
+  --lumi-sys-color--code-red-text: #ff5a59;
+  --lumi-sys-color--code-yellow-text: #ffdb0f;
+
+  --lumi-sys-color--chart-series-1: #9dd2ff;
+  --lumi-sys-color--chart-series-2: #96a7d6;
+  --lumi-sys-color--chart-series-3: #50e389;
+  --lumi-sys-color--chart-series-4: #c8f585;
+  --lumi-sys-color--chart-series-5: #f5f2e6;
+  --lumi-sys-color--chart-series-6: #dcd8c0;
+  --lumi-sys-color--chart-series-7: #82c7ff;
+  --lumi-sys-color--chart-series-8: #f5d77f;
+  --lumi-sys-color--chart-series-9: #d9ceff;
+  --lumi-sys-color--chart-series-10: #ffa6d7;
+}
+
+/* ============================================================
+ * 3b. OS-LEVEL DARK FALLBACK  (prefers-color-scheme)
+ *     A prior refactor introduced this stylesheet and moved the dark tokens onto
+ *     :root[data-theme="dark"], but dropped the @media (prefers-color-scheme:
+ *     dark) trigger that widgets previously carried in their own <style>.
+ *     Inline widgets whose host sends no set-theme / data-theme message therefore
+ *     stayed on the light --surface (#fdfcfc), rendering white in dark mode.
+ *     Re-apply the dark values on OS dark; an explicit host data-theme="light"
+ *     still opts back to light. Keep in sync with the :root[data-theme="dark"]
+ *     block above.
+ * ============================================================ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --body-bg: #0f0f0f;
+    --lumi-sys-elevation--level1: 0 0 20px 0 rgba(0, 0, 0, 0.28);
+    --lumi-sys-elevation--level2: 0 0 20px 0 rgba(0, 0, 0, 0.40);
+
+    --lumi-sys-color--surface: #0f0f0f;
+    --lumi-sys-color--surface-dim: #141414;
+    --lumi-sys-color--surface-bright: #1c1c1c;
+    --lumi-sys-color--surface-background: #0f0f0f;
+    --lumi-sys-color--surface-accent: #14204f;
+    --lumi-sys-color--surface-container: #141414;
+    --lumi-sys-color--surface-container-high: #1c1c1c;
+    --lumi-sys-color--surface-translucent: rgba(24, 24, 27, 0.88);
+    --lumi-sys-color--on-surface: #e0e0e0;
+    --lumi-sys-color--on-surface-default: #e0e0e0;
+    --lumi-sys-color--on-surface-variant: rgba(255, 255, 255, 0.55);
+    --lumi-sys-color--on-surface-de-emphasis: rgba(255, 255, 255, 0.55);
+    --lumi-sys-color--on-surface-low: rgba(255, 255, 255, 0.12);
+    --lumi-sys-color--positive: #0ebc5f;
+    --lumi-sys-color--positive-container: #002220;
+    --lumi-sys-color--on-positive-container: #0ebc5f;
+    --lumi-sys-color--error: #ff4c45;
+    --lumi-sys-color--error-container: #3c0202;
+    --lumi-sys-color--on-error-container: #ff4c45;
+    --lumi-sys-color--accent: #1f3b9b;
+    --lumi-sys-color--accent-container: #192967;
+    --lumi-sys-color--accent-fixed: #3186ff;
+    --lumi-sys-color--primary: #9dd2ff;
+    --lumi-sys-color--on-primary: #192967;
+    --lumi-sys-color--black: #000000;
+    --lumi-sys-color--white: #ffffff;
+    --lumi-sys-color--outline: #9a9b9c;
+    --lumi-sys-color--stroke-default: #2d2f38;
+
+    --lumi-sys-color--code-background: #141414;
+    --lumi-sys-color--code-primary-text: #ffffff;
+    --lumi-sys-color--code-blue-text: #4fa0ff;
+    --lumi-sys-color--code-green-text: #60d673;
+    --lumi-sys-color--code-grey-text: #808080;
+    --lumi-sys-color--code-pink-text: #ff96da;
+    --lumi-sys-color--code-purple-text: #969dff;
+    --lumi-sys-color--code-red-text: #ff5a59;
+    --lumi-sys-color--code-yellow-text: #ffdb0f;
+
+    --lumi-sys-color--chart-series-1: #9dd2ff;
+    --lumi-sys-color--chart-series-2: #96a7d6;
+    --lumi-sys-color--chart-series-3: #50e389;
+    --lumi-sys-color--chart-series-4: #c8f585;
+    --lumi-sys-color--chart-series-5: #f5f2e6;
+    --lumi-sys-color--chart-series-6: #dcd8c0;
+    --lumi-sys-color--chart-series-7: #82c7ff;
+    --lumi-sys-color--chart-series-8: #f5d77f;
+    --lumi-sys-color--chart-series-9: #d9ceff;
+    --lumi-sys-color--chart-series-10: #ffa6d7;
+  }
+}
+
+/* ============================================================
+ * 4. SHORT DIAGRAM / CHART ALIASES
+ *    Legacy diagram.md and chart.jinja2 reference short names such as
+ *    --surface, --on-surface, --chart-1..10, --primary, --r-full. These MUST
+ *    resolve to the canonical --lumi-sys-color--* tokens (which flip in dark
+ *    mode) — otherwise every diagram var() falls back to black (historical
+ *    mass-regression bug #4). Light-hex fallbacks are a last resort only.
+ * ============================================================ */
+:root {
+  /* surfaces */
+  --surface: var(--lumi-sys-color--surface, #fdfcfc);
+  --surface-dim: var(--lumi-sys-color--surface-dim, #f2f0f0);
+  --surface-bright: var(--lumi-sys-color--surface-bright, #ffffff);
+  --surface-container: var(--lumi-sys-color--surface-container, #f2f0f0);
+  --surface-container-high: var(--lumi-sys-color--surface-container-high, #e6e6e6);
+  --surface-container-lowest: var(--lumi-sys-color--surface, #ffffff);
+  --surface-accent: var(--lumi-sys-color--surface-accent, #9dd2ff);
+  --surface-translucent: var(--lumi-sys-color--surface-translucent, rgba(255, 255, 255, 0.88));
+  --surface-glass: var(--lumi-sys-color--surface-translucent, rgba(255, 255, 255, 0.88));
+  /* foreground */
+  --on-surface: var(--lumi-sys-color--on-surface, #000000);
+  --on-surface-variant: var(--lumi-sys-color--on-surface-variant, rgba(0, 0, 0, 0.55));
+  --on-surface-low: var(--lumi-sys-color--on-surface-low, rgba(0, 0, 0, 0.08));
+  /* accents / brand */
+  --primary: var(--lumi-sys-color--primary, #3186ff);
+  --primary-container: var(--lumi-sys-color--accent-container, #dcf1ff);
+  --accent: var(--lumi-sys-color--accent, #9dd2ff);
+  --accent-container: var(--lumi-sys-color--accent-container, #dcf1ff);
+  --accent-fixed: var(--lumi-sys-color--accent-fixed, #3186ff);
+  /* status */
+  --positive: var(--lumi-sys-color--positive, #008052);
+  --positive-container: var(--lumi-sys-color--positive-container, #daf9d4);
+  --error: var(--lumi-sys-color--error, #de2d29);
+  --error-container: var(--lumi-sys-color--error-container, #ffdeec);
+  /* structure */
+  --outline: var(--lumi-sys-color--outline, #727676);
+  --stroke-default: var(--lumi-sys-color--stroke-default, #e3e3e3);
+  /* chart series 1..10 */
+  --chart-1: var(--lumi-sys-color--chart-series-1, #2575fc);
+  --chart-2: var(--lumi-sys-color--chart-series-2, #5b6e9e);
+  --chart-3: var(--lumi-sys-color--chart-series-3, #228a49);
+  --chart-4: var(--lumi-sys-color--chart-series-4, #62991b);
+  --chart-5: var(--lumi-sys-color--chart-series-5, #1e564d);
+  --chart-6: var(--lumi-sys-color--chart-series-6, #526a45);
+  --chart-7: var(--lumi-sys-color--chart-series-7, #2780c4);
+  --chart-8: var(--lumi-sys-color--chart-series-8, #997112);
+  --chart-9: var(--lumi-sys-color--chart-series-9, #705ec2);
+  --chart-10: var(--lumi-sys-color--chart-series-10, #c84288);
+  /* code palette */
+  --code-background: var(--lumi-sys-color--code-background, #000000);
+  --code-primary-text: var(--lumi-sys-color--code-primary-text, #ffffff);
+  /* spacing shorthands */
+  --spacing-xs: var(--lumi-sys-spacing--xs, 4px);
+  --spacing-s: var(--lumi-sys-spacing--s, 8px);
+  --spacing-m: var(--lumi-sys-spacing--m, 12px);
+  --spacing-l: var(--lumi-sys-spacing--l, 16px);
+  --spacing-xl: var(--lumi-sys-spacing--xl, 20px);
+  /* radius shorthands */
+  --r-s: var(--lumi-sys-shape--small, 8px);
+  --r-m: var(--lumi-sys-shape--medium, 12px);
+  --r-l: var(--lumi-sys-shape--large, 16px);
+  --r-full: var(--lumi-sys-shape--full, 999px);
+}
+
+/* ============================================================
+ * 5. IN-SCOPE PRE-BAKED COMPONENT CLASSES
+ *    Interactive controls + simple display components only (Decision D5).
+ *    Complex components (timeline, sequence, stepper, pros-cons, hero, HUD,
+ *    hotspot, media grid) are intentionally excluded.
+ * ============================================================ */
+
+/* Global font rendering quality + themed surface backdrop.
+ * background/color MUST be set here (SSoT) so the widget backdrop follows the
+ * light/dark surface token deterministically. Without this, a widget whose
+ * model-generated markup forgets `background: var(--surface)` on its root
+ * container falls back to the browser-default white body, producing a broken
+ * dark mode (light header/chart area behind a dark card). Regression source:
+ * batch1 PB-A02 dark. */
+html, body {
+  background: var(--body-bg, transparent) !important;
+  color: var(--on-surface) !important;
+  /* Auto-resizing iframe: content grows the frame, never scrolls the document.
+   * Model widgets already emit this; declared here as the SSoT default. */
+  overflow-y: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
+}
+
+.widget-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-inline: 0 !important;
+  box-sizing: border-box;
+}
+
+/* ============================================================
+ * SCROLLBAR DISCIPLINE (single source of truth)
+ *   Long lists/cards flow and let the iframe auto-resize (see the C++
+ *   NeutralizeInnerScroll pass, which removes accidental tiny scroll boxes).
+ *   For LEGITIMATE overflow that remains (wide tables, code, pan-containers,
+ *   large >=240px viewports) render a slim, theme-aware scrollbar.
+ *   One token carries the correct light/dark contrast (the auto-flipped
+ *   stroke token is too dark on #0f0f0f), referenced once = SSoT.
+ * ============================================================ */
+:root { --lumi-scrollbar-thumb: rgba(0, 0, 0, 0.20); }
+:root[data-theme="dark"], body.dark-mode { --lumi-scrollbar-thumb: rgba(255, 255, 255, 0.20); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --lumi-scrollbar-thumb: rgba(255, 255, 255, 0.20); }
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--lumi-scrollbar-thumb) transparent;
+}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background-color: var(--lumi-scrollbar-thumb);
+  border-radius: var(--lumi-sys-shape--full, 999px);
+}
+
+/* --- Buttons --- */
+/* Universal button fallback (element specificity 0,0,1) — beats `* { padding: 0 }`
+   author resets (0,0,0) while still yielding to any author class selector (0,1,0). */
+button {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lumi-sys-spacing--xs, 6px);
+  min-height: 36px;
+  padding: 6px 16px;
+  font-family: var(--ff-sans, 'Google Sans Flex', 'Google Sans', sans-serif);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  color: var(--on-surface, #000000);
+  background-color: var(--surface-bright, #ffffff);
+  border: 1px solid var(--stroke-default, #e3e3e3);
+  border-radius: var(--lumi-sys-shape--full, 999px);
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+button:hover {
+  background-color: var(--surface-container-high, #e6e6e6);
+}
+button.active, button.is-active, button.selected, button.is-selected, button[aria-pressed="true"], button[aria-selected="true"] {
+  background-color: var(--accent-container, #dcf1ff);
+  color: var(--accent-fixed, #3186ff);
+  border-color: transparent;
+}
+
+.lumi-btn, [class^="lumi-btn-"], [class*=" lumi-btn-"] { display: inline-flex; align-items: center; justify-content: center; gap: var(--lumi-sys-spacing--s, 8px); min-height: 40px; padding: 0px 20px; font-family: var(--ff-sans, 'Google Sans Flex', 'Google Sans', sans-serif); font-size: 14px; font-weight: 500; line-height: 20px; border-radius: var(--lumi-sys-shape--full, 999px); border: 1px solid var(--lumi-sys-color--stroke-default, #e3e3e3); cursor: pointer; user-select: none; transition: background-color 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s, transform 0.1s; text-decoration: none; box-sizing: border-box; white-space: nowrap; }
+.lumi-btn:active, .lumi-btn.is-pressed, [class^="lumi-btn-"]:active, [class*=" lumi-btn-"]:active { transform: scale(0.98); }
+.lumi-btn--tonal, .lumi-btn-tonal, .lumi-btn--secondary, .lumi-btn-secondary, [class^="lumi-btn-"], [class*=" lumi-btn-"] { background-color: var(--lumi-sys-color--surface-bright, #ffffff); color: var(--lumi-sys-color--on-surface-default, #000000); }
+.lumi-btn--tonal:hover, .lumi-btn-tonal:hover, .lumi-btn--secondary:hover, .lumi-btn-secondary:hover, [class^="lumi-btn-"]:hover, [class*=" lumi-btn-"]:hover { background-color: var(--lumi-sys-color--surface-container-high, #e6e6e6); }
+.lumi-btn--accent, .lumi-btn-accent, .lumi-btn--primary, .lumi-btn-primary { background-color: var(--lumi-sys-color--accent, #9dd2ff); color: var(--lumi-sys-color--on-surface-default, #000000); border-color: transparent; }
+.lumi-btn--accent:hover, .lumi-btn-accent:hover, .lumi-btn--primary:hover, .lumi-btn-primary:hover { background-color: var(--lumi-sys-color--accent-container, #dcf1ff); }
+.lumi-btn--bright, .lumi-btn-bright { background-color: var(--lumi-sys-color--surface-bright, #ffffff); color: var(--lumi-sys-color--on-surface-default, #000000); border-color: var(--lumi-sys-color--stroke-default, #e3e3e3); box-shadow: none; }
+.lumi-btn--bright:hover, .lumi-btn-bright:hover { background-color: var(--lumi-sys-color--surface-container-high, #e6e6e6); }
+.lumi-btn--ghost, .lumi-btn-ghost, .lumi-btn--on-surface { background-color: var(--lumi-sys-color--on-surface-low, rgba(0, 0, 0, 0.04)); color: var(--lumi-sys-color--on-surface-default, #000000); border-color: transparent; }
+.lumi-btn--ghost:hover, .lumi-btn-ghost:hover, .lumi-btn--on-surface:hover { background-color: var(--lumi-sys-color--on-surface-low, rgba(0, 0, 0, 0.08)); }
+.lumi-btn--translucent { background-color: rgba(255, 255, 255, 0.25); backdrop-filter: blur(12px); color: var(--lumi-sys-color--on-surface-default, #000000); border-color: rgba(255, 255, 255, 0.3); }
+.lumi-btn--translucent:hover { background-color: rgba(255, 255, 255, 0.35); }
+.lumi-btn--small, .lumi-btn-small { min-height: 36px; padding: 0px 16px; font-size: 13px; line-height: 18px; gap: var(--lumi-sys-spacing--xs, 4px); }
+.lumi-btn--xsmall, .lumi-btn-xsmall { min-height: 24px; padding: 0px 10px; font-size: 11px; line-height: 16px; gap: 4px; }
+.lumi-btn:disabled, .lumi-btn.is-disabled, [class^="lumi-btn-"]:disabled, [class*=" lumi-btn-"]:disabled { opacity: var(--lumi-sys-opacity-state--disabled, 0.38); cursor: not-allowed; pointer-events: none; }
+.lumi-btn.is-selected, .lumi-btn.selected, .lumi-btn.is-active, .lumi-btn.active, .lumi-btn[aria-pressed="true"], .lumi-btn[aria-selected="true"] { background-color: var(--lumi-sys-color--accent-container, #dcf1ff); color: var(--lumi-sys-color--on-surface-default, #000000); border-color: transparent; }
+.lumi-btn.is-selected:hover, .lumi-btn.selected:hover, .lumi-btn.is-active:hover, .lumi-btn.active:hover, .lumi-btn[aria-pressed="true"]:hover, .lumi-btn[aria-selected="true"]:hover { background-color: var(--lumi-sys-color--accent, #9dd2ff); }
+
+/* --- Switch --- */
+.lumi-switch { display: inline-flex; align-items: center; gap: var(--lumi-sys-spacing--s, 8px); cursor: pointer; font-family: var(--ff-sans, 'Google Sans Flex', 'Google Sans', sans-serif); font-size: 15px; color: var(--lumi-sys-color--on-surface-default, #000000); user-select: none; }
+.lumi-switch input[type="checkbox"] { position: absolute; opacity: 0; width: 0px; height: 0px; pointer-events: none; }
+.lumi-switch__track { position: relative; display: inline-flex; align-items: center; width: 52px; height: 32px; background-color: var(--lumi-sys-color--surface-dim, #f2f0f0); border: 2px solid var(--lumi-sys-color--stroke-default, rgba(0, 0, 0, 0.12)); border-radius: var(--lumi-sys-shape--full, 999px); transition: background-color 0.2s, border-color 0.2s; flex-shrink: 0; box-sizing: border-box; }
+.lumi-switch__thumb, .lumi-switch__track::after { content: ""; position: absolute; top: 50%; left: 6px; transform: translateY(-50%); width: 16px; height: 16px; border-radius: 50%; background-color: var(--lumi-sys-color--on-surface-variant, #757575); transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center; box-sizing: border-box; }
+.lumi-switch input[type="checkbox"]:checked + .lumi-switch__track { background-color: var(--lumi-sys-color--accent-fixed, #3186ff); border-color: transparent; }
+.lumi-switch input[type="checkbox"]:checked + .lumi-switch__track .lumi-switch__thumb, .lumi-switch input[type="checkbox"]:checked + .lumi-switch__track::after { left: 22px; width: 24px; height: 24px; background-color: rgb(255, 255, 255); }
+.lumi-switch input[type="checkbox"]:disabled + .lumi-switch__track { opacity: var(--lumi-sys-opacity-state--disabled, 0.38); cursor: not-allowed; }
+.lumi-switch--small .lumi-switch__track, .lumi-switch--mini .lumi-switch__track { width: 32px; height: 20px; }
+.lumi-switch--small .lumi-switch__thumb, .lumi-switch--small .lumi-switch__track::after, .lumi-switch--mini .lumi-switch__thumb, .lumi-switch--mini .lumi-switch__track::after { width: 12px; height: 12px; left: 2px; }
+.lumi-switch--small input[type="checkbox"]:checked + .lumi-switch__track .lumi-switch__thumb, .lumi-switch--small input[type="checkbox"]:checked + .lumi-switch__track::after, .lumi-switch--mini input[type="checkbox"]:checked + .lumi-switch__track .lumi-switch__thumb, .lumi-switch--mini input[type="checkbox"]:checked + .lumi-switch__track::after { left: 12px; width: 16px; height: 16px; }
+
+/* --- Checkbox --- */
+.lumi-checkbox-label { display: inline-flex; align-items: center; gap: var(--lumi-sys-spacing--s, 8px); cursor: pointer; font-family: var(--ff-sans, 'Google Sans Flex', 'Google Sans', sans-serif); font-size: 15px; color: var(--lumi-sys-color--on-surface-default, #000000); user-select: none; }
+.lumi-checkbox-label input[type="checkbox"] { position: absolute; opacity: 0; width: 0px; height: 0px; pointer-events: none; }
+.lumi-checkbox { position: relative; width: 24px; height: 24px; border-radius: var(--lumi-sys-shape--small, 8px); border: 2px solid var(--lumi-sys-color--on-surface-variant, rgba(0, 0, 0, 0.55)); background-color: transparent; transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-sizing: border-box; }
+.lumi-checkbox-label:hover .lumi-checkbox { background-color: var(--lumi-sys-color--on-surface-low, rgba(0, 0, 0, 0.04)); border-color: var(--lumi-sys-color--on-surface-default, #000000); }
+.lumi-checkbox-label input[type="checkbox"]:checked ~ .lumi-checkbox, .lumi-checkbox-label input[type="checkbox"]:indeterminate ~ .lumi-checkbox, .lumi-checkbox.is-indeterminate { background-color: var(--lumi-sys-color--on-surface-default, #000000); border-color: transparent; }
+.lumi-checkbox .lumi-checkmark { font-size: 18px; line-height: 1; color: var(--lumi-sys-color--surface, #ffffff); fill: var(--lumi-sys-color--surface, #ffffff); display: none; user-select: none; }
+.lumi-checkbox-label input[type="checkbox"]:checked ~ .lumi-checkbox .lumi-checkmark, .lumi-checkbox-label input[type="checkbox"]:checked ~ .lumi-checkbox .lumi-checkbox__check { display: block; }
+.lumi-checkbox-label input[type="checkbox"]:indeterminate ~ .lumi-checkbox .lumi-checkbox__indeterminate, .lumi-checkbox.is-indeterminate .lumi-checkbox__indeterminate { display: block; }
+.lumi-checkbox-label input[type="checkbox"]:disabled ~ .lumi-checkbox, .lumi-checkbox-label input[type="checkbox"]:disabled ~ span { opacity: var(--lumi-sys-opacity-state--disabled, 0.38); cursor: not-allowed; }
+
+/* --- Slider --- */
+.lumi-slider-container { display: flex; align-items: center; gap: var(--lumi-sys-spacing--m, 16px); width: 100%; }
+.lumi-slider-row { display: flex; flex-direction: column; gap: var(--lumi-sys-spacing--xs, 4px); width: 100%; }
+.lumi-slider-label { font-family: var(--ff-sans, 'Google Sans Flex', 'Google Sans', sans-serif); font-size: 15px; font-weight: 400; color: var(--lumi-sys-color--on-surface-default, #000000); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lumi-slider { appearance: none; width: calc(100% + 28px); margin-left: -14px; margin-right: -14px; height: 40px; background: transparent; cursor: pointer; box-sizing: border-box; }
+.lumi-slider:focus { outline: none; }
+.lumi-slider::-webkit-slider-runnable-track { height: 4px; --thumb-center: calc(14px + (100% - 28px) * (var(--progress, 50%) / 100%)); --active-end: calc(var(--thumb-center) - 8px + (var(--progress, 50%) / 100%) * 6px); background-image: radial-gradient(circle at calc(100% - 18px) center, var(--lumi-sys-color--on-surface-variant, #757575) 2px, transparent 2.5px), linear-gradient( to right, transparent 0, transparent 14px, var(--lumi-sys-color--on-surface-default, #000000) 14px, var(--lumi-sys-color--on-surface-default, #000000) var(--active-end), transparent var(--active-end), transparent calc(var(--thumb-center) + 8px), var(--lumi-sys-color--stroke-default, rgba(0, 0, 0, 0.12)) calc(var(--thumb-center) + 8px), var(--lumi-sys-color--stroke-default, rgba(0, 0, 0, 0.12)) calc(100% - 16px), transparent calc(100% - 16px), transparent 100% ); border-radius: var(--lumi-sys-shape--full, 999px); border-width: medium; border-style: none; border-color: currentcolor; border-image: none; }
+.lumi-slider::-webkit-slider-thumb { appearance: none; width: 32px; height: 32px; border-radius: 50%; background-color: transparent; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Crect x='14' y='6' width='4' height='20' rx='2' fill='%23000000'/%3E%3C/svg%3E"); background-size: 32px 32px; background-repeat: no-repeat; background-position: center center; border-width: medium; border-style: none; border-color: currentcolor; border-image: none; box-sizing: border-box; margin-top: -14px; cursor: pointer; transition: background-color 0.15s; }
+.lumi-slider:hover::-webkit-slider-thumb { background-color: var(--lumi-sys-color--on-surface-low, rgba(0, 0, 0, 0.08)); }
+.lumi-slider:active::-webkit-slider-thumb { background-color: var(--lumi-sys-color--on-surface-low, rgba(0, 0, 0, 0.12)); }
+.lumi-slider:disabled { opacity: var(--lumi-sys-opacity-state--disabled, 0.38); cursor: not-allowed; }
+.lumi-slider:disabled::-webkit-slider-thumb { cursor: not-allowed; box-shadow: none; }
+.lumi-slider-value { display: flex; align-items: center; justify-content: center; min-width: 64px; height: 40px; padding: 0px 12px; background-color: var(--lumi-sys-color--surface-dim, #f2f0f0); border-radius: var(--lumi-sys-shape--medium, 16px); font-family: var(--ff-mono, 'Google Sans Code', 'Google Sans Mono', monospace); font-size: 15px; font-weight: 400; color: var(--lumi-sys-color--on-surface-default, #000000); flex-shrink: 0; box-sizing: border-box; }
+
+/* --- Text input --- */
+.lumi-input-group { display: flex; flex-direction: column; gap: var(--lumi-sys-spacing--xs, 4px); width: 100%; }
+.lumi-input-label { font-family: var(--ff-sans, 'Google Sans Flex', 'Google Sans', sans-serif); font-size: 14px; font-weight: 500; line-height: 20px; color: var(--lumi-sys-color--on-surface-default, #000000); }
+.lumi-input { appearance: none; width: 100%; min-height: 48px; padding: 0px 16px; font-family: var(--ff-sans, 'Google Sans Flex', 'Google Sans', sans-serif); font-size: 15px; font-weight: 400; line-height: 22px; color: var(--lumi-sys-color--on-surface-default, #000000); background-color: var(--lumi-sys-color--surface-bright, #ffffff); border: 1px solid var(--lumi-sys-color--stroke-default, rgba(0, 0, 0, 0.12)); border-radius: var(--lumi-sys-shape--large, 16px); background-clip: padding-box; outline: none; box-sizing: border-box; transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s; }
+.lumi-input::placeholder { color: var(--lumi-sys-color--on-surface-variant, rgba(0, 0, 0, 0.55)); opacity: 0.7; }
+.lumi-input:hover { border-color: var(--lumi-sys-color--on-surface-default, #000000); }
+.lumi-input:focus, .lumi-input:focus-visible { border-color: var(--lumi-sys-color--accent-fixed, #3186ff); box-shadow: 0 0 0 2px var(--lumi-sys-color--accent-container, rgba(49, 134, 255, 0.25)); }
+textarea.lumi-input, .lumi-input--area { min-height: 100px; padding: 12px 16px; resize: vertical; line-height: 22px; }
+.lumi-input.is-error, .lumi-input-group.is-error .lumi-input { border-color: var(--lumi-sys-color--error, #ff4c45); }
+.lumi-input-helper { font-family: var(--ff-sans, 'Google Sans Flex', 'Google Sans', sans-serif); font-size: 12px; line-height: 16px; color: var(--lumi-sys-color--on-surface-variant, rgba(0, 0, 0, 0.55)); }
+.lumi-input-group.is-error .lumi-input-helper, .lumi-input-helper--error { color: var(--lumi-sys-color--error, #ff4c45); }
+.lumi-input:disabled, .lumi-input.is-disabled { opacity: var(--lumi-sys-opacity-state--disabled, 0.38); background-color: var(--lumi-sys-color--surface-dim, #f2f0f0); cursor: not-allowed; }
+
+/* --- Focus ring --- */
+:focus-visible { outline: 2px solid var(--lumi-sys-color--on-surface-default, #000000) !important; outline-offset: 2px !important; box-shadow: none !important; }
+.lumi-btn:focus-visible, .lumi-switch input[type="checkbox"]:focus-visible + .lumi-switch__track, .lumi-checkbox-label input[type="checkbox"]:focus-visible ~ .lumi-checkbox, .lumi-slider:focus-visible::-webkit-slider-thumb, .lumi-input:focus-visible { outline: 2px solid var(--lumi-sys-color--on-surface-default, #000000); outline-offset: 2px; box-shadow: none; }
+
+/* --- Typography: Display / Headline / Body / Label --- */
+.lumi-display-l { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 42px; line-height: 48px; font-weight: 280; font-variation-settings: "wght" 280, "wdth" 100, "opsz" 42, "ROND" 100; }
+.lumi-display-l-emphasized { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 42px; line-height: 48px; font-weight: 450; font-variation-settings: "wght" 450, "wdth" 100, "opsz" 42, "ROND" 100; }
+.lumi-display-m { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 36px; line-height: 44px; font-weight: 320; font-variation-settings: "wght" 320, "wdth" 100, "opsz" 36, "ROND" 100; }
+.lumi-display-m-emphasized { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 36px; line-height: 44px; font-weight: 480; font-variation-settings: "wght" 480, "wdth" 100, "opsz" 36, "ROND" 100; }
+.lumi-display-s { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 32px; line-height: 38px; font-weight: 360; font-variation-settings: "wght" 360, "wdth" 100, "opsz" 32, "ROND" 100; }
+.lumi-display-s-emphasized { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 32px; line-height: 38px; font-weight: 500; font-variation-settings: "wght" 500, "wdth" 100, "opsz" 32, "ROND" 100; }
+.lumi-headline-l { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 28px; line-height: 36px; font-weight: 350; font-variation-settings: "wght" 350, "wdth" 100, "opsz" 28, "ROND" 20; }
+.lumi-headline-l-emphasized { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 28px; line-height: 36px; font-weight: 520; font-variation-settings: "wght" 520, "wdth" 100, "opsz" 28, "ROND" 20; }
+.lumi-headline-m { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 24px; line-height: 28px; font-weight: 380; font-variation-settings: "wght" 380, "wdth" 100, "opsz" 24, "ROND" 20; }
+.lumi-headline-m-emphasized { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 24px; line-height: 28px; font-weight: 540; font-variation-settings: "wght" 540, "wdth" 100, "opsz" 24, "ROND" 20; }
+.lumi-headline-s { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 20px; line-height: 24px; font-weight: 470; font-variation-settings: "wght" 470, "wdth" 94, "opsz" 20, "ROND" 20; }
+.lumi-headline-s-emphasized { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 20px; line-height: 24px; font-weight: 580; font-variation-settings: "wght" 580, "wdth" 94, "opsz" 20, "ROND" 20; }
+.lumi-body-l { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 17px; line-height: 24px; font-weight: 400; font-variation-settings: "wght" 400, "wdth" 92, "opsz" 17; }
+.lumi-body-l-emphasized { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 17px; line-height: 24px; font-weight: 540; font-variation-settings: "wght" 540, "wdth" 92, "opsz" 17; font-variant-numeric: tabular-nums; }
+.lumi-body-m { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 15px; line-height: 20px; font-weight: 400; font-variation-settings: "wght" 400, "wdth" 92, "opsz" 15; }
+.lumi-body-m-emphasized { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 15px; line-height: 20px; font-weight: 540; font-variation-settings: "wght" 540, "wdth" 92, "opsz" 15; font-variant-numeric: tabular-nums; }
+.lumi-body-s { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 13px; line-height: 17px; font-weight: 400; font-variation-settings: "wght" 400, "wdth" 92, "opsz" 13; }
+.lumi-body-s-emphasized { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 13px; line-height: 17px; font-weight: 540; font-variation-settings: "wght" 540, "wdth" 92, "opsz" 13; font-variant-numeric: tabular-nums; }
+.lumi-label-l { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 17px; line-height: 24px; font-weight: 370; font-variation-settings: "wght" 370, "wdth" 92, "opsz" 17; }
+.lumi-label-l-emphasized { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 17px; line-height: 24px; font-weight: 510; font-variation-settings: "wght" 510, "wdth" 92, "opsz" 17; }
+.lumi-label-m { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 15px; line-height: 20px; font-weight: 370; font-variation-settings: "wght" 370, "wdth" 92, "opsz" 15; }
+.lumi-label-m-emphasized { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 15px; line-height: 20px; font-weight: 510; font-variation-settings: "wght" 510, "wdth" 92, "opsz" 15; }
+.lumi-label-s { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 13px; line-height: 20px; font-weight: 370; font-variation-settings: "wght" 370, "wdth" 92, "opsz" 13; }
+.lumi-label-s-emphasized { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 13px; line-height: 20px; font-weight: 510; font-variation-settings: "wght" 510, "wdth" 92, "opsz" 13; }
+
+/* --- Typography: Monospace / Extended (Google Sans Code) --- */
+.lumi-blockquote { font-family: var(--ff-mono, 'Google Sans Code', monospace); font-style: italic; font-size: 22px; line-height: 30px; font-weight: 300; font-variation-settings: "wght" 300, "opsz" 22, "MONO" 0; }
+.lumi-takeaway { font-family: var(--ff-mono, 'Google Sans Code', monospace); font-style: italic; font-size: 17px; line-height: 24px; font-weight: 400; font-variation-settings: "wght" 400, "opsz" 17, "MONO" 0; }
+.lumi-caption { font-family: var(--ff-mono, 'Google Sans Code', monospace); font-style: italic; font-size: 13px; line-height: 20px; font-weight: 400; font-variation-settings: "wght" 400, "opsz" 13, "MONO" 0; }
+.lumi-code { font-family: var(--ff-mono, 'Google Sans Code', monospace); font-size: 15px; line-height: 20px; font-weight: 400; font-variation-settings: "wght" 400, "MONO" 1; }
+.lumi-bullet { font-family: var(--ff-mono, 'Google Sans Code', monospace); font-size: 15px; line-height: 24px; font-weight: 650; font-variation-settings: "wght" 650, "MONO" 1; }
+
+/* --- Cards & attribution --- */
+.lumi-summary-card { padding: var(--lumi-sys-spacing--l, 16px); background-color: var(--lumi-sys-color--surface-container, #f2f0f0); border-radius: var(--lumi-sys-shape--medium, 12px); color: var(--lumi-sys-color--on-surface-default, #000000); font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 15px; line-height: 20px; box-sizing: border-box; }
+.lumi-link-card { display: flex; align-items: center; justify-content: space-between; padding: var(--lumi-sys-spacing--l, 16px); background-color: var(--lumi-sys-color--surface-container, #f2f0f0); border-radius: var(--lumi-sys-shape--medium, 12px); text-decoration: none; color: var(--lumi-sys-color--on-surface-default, #000000); transition: background-color 0.15s; box-sizing: border-box; }
+.lumi-link-card:hover { background-color: var(--lumi-sys-color--surface-container-high, #e6e6e6); }
+.lumi-attribution-buffer { margin-top: var(--lumi-sys-spacing--xxl, 24px); font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 13px; color: var(--lumi-sys-color--on-surface-de-emphasis, rgba(0, 0, 0, 0.55)); }
+.lumi-card { background-color: var(--lumi-sys-color--surface-dim, #f2f0f0); border-radius: var(--lumi-sys-shape--large-max, 24px); padding: var(--lumi-sys-spacing--3xl, 28px); display: flex; flex-direction: column; gap: var(--lumi-sys-spacing--s, 8px); width: 100%; box-sizing: border-box; }
+.lumi-card-title { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 20px; font-weight: 500; font-variation-settings: "wght" 470, "wdth" 94, "opsz" 20; color: var(--lumi-sys-color--on-surface, #000000); margin: 0px; }
+.lumi-card-subtitle { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 13px; font-weight: 400; font-variation-settings: "wght" 400, "wdth" 92, "opsz" 13; color: var(--lumi-sys-color--on-surface-variant, rgba(0, 0, 0, 0.55)); margin: 0px; }
+.lumi-card-body { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 15px; font-weight: 400; font-variation-settings: "wght" 400, "wdth" 92, "opsz" 15; color: var(--lumi-sys-color--on-surface, #000000); margin: var(--lumi-sys-spacing--xs, 4px) 0 0 0; }
+.lumi-overlay-card { background-color: var(--surface-translucent, rgba(255, 255, 255, 0.88)); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--stroke-default); border-radius: var(--lumi-sys-shape--medium, 12px); padding: var(--lumi-sys-spacing--m, 12px) var(--lumi-sys-spacing--l, 16px); color: var(--on-surface); box-shadow: var(--lumi-sys-elevation--level1); box-sizing: border-box; }
+
+/* --- Progress bar --- */
+.lumi-progress-tracker { display: flex; flex-direction: column; gap: var(--lumi-sys-spacing--xs, 4px); width: 100%; }
+.lumi-progress-bar { width: 100%; height: 8px; background-color: var(--lumi-sys-color--stroke-default, #e3e3e3); border-radius: var(--lumi-sys-shape--full, 999px); overflow: hidden; }
+.lumi-progress-fill { height: 100%; background-color: var(--lumi-sys-color--accent-fixed, #3186ff); border-radius: var(--lumi-sys-shape--full, 999px); transition: width 0.3s; }
+
+/* --- Accordion (card group variant) --- */
+.lumi-accordion-group { display: flex; flex-direction: column; gap: var(--lumi-sys-spacing--s, 8px); }
+.lumi-accordion-group .lumi-accordion-item { background-color: var(--lumi-sys-color--surface-container, #f2f0f0); border-radius: var(--lumi-sys-shape--medium, 12px); overflow: hidden; transition: background-color 0.15s; }
+.lumi-accordion-group .lumi-accordion-header { padding: var(--lumi-sys-spacing--l, 16px); font-family: var(--ff-sans, sans-serif); font-size: 15px; font-weight: 540; cursor: pointer; user-select: none; display: flex; justify-content: space-between; align-items: center; color: var(--lumi-sys-color--on-surface-default, #000000); }
+.lumi-accordion-group .lumi-accordion-chevron { transition: transform 0.2s; font-size: 12px; }
+.lumi-accordion-group .lumi-accordion-item.active .lumi-accordion-chevron { transform: rotate(180deg); }
+.lumi-accordion-group .lumi-accordion-body { display: none; padding: 0 var(--lumi-sys-spacing--l, 16px) var(--lumi-sys-spacing--l, 16px) var(--lumi-sys-spacing--l, 16px); font-family: var(--ff-sans, sans-serif); font-size: 15px; color: var(--lumi-sys-color--on-surface-de-emphasis, rgba(0, 0, 0, 0.55)); line-height: 20px; }
+.lumi-accordion-group .lumi-accordion-item.active .lumi-accordion-body { display: block; }
+
+/* --- Accordion (borderless list variant) --- */
+.lumi-accordion { display: flex; flex-direction: column; width: 100%; border-top: 1px solid var(--lumi-sys-color--on-surface-low, rgba(0, 0, 0, 0.08)); }
+.lumi-accordion-item { display: flex; flex-direction: column; width: 100%; background: transparent; border-radius: 0px; border-bottom: 1px solid var(--lumi-sys-color--on-surface-low, rgba(0, 0, 0, 0.08)); }
+.lumi-accordion-header { display: flex; justify-content: space-between; align-items: center; padding: var(--lumi-sys-spacing--xl, 20px) 0; cursor: pointer; user-select: none; }
+.lumi-accordion-title { margin: 0px; color: var(--lumi-sys-color--on-surface-default, #000000); }
+.lumi-accordion-item.active .lumi-accordion-content { display: flex; flex-direction: column; gap: var(--lumi-sys-spacing--l, 16px); }
+.lumi-accordion-content { display: none; padding-bottom: var(--lumi-sys-spacing--xxl, 24px); }
+.lumi-accordion-field { display: flex; flex-direction: column; gap: var(--lumi-sys-spacing--xxs, 2px); }
+.lumi-accordion-field-label { margin: 0px; color: var(--lumi-sys-color--on-surface-default, #000000); }
+.lumi-accordion-field-val { margin: 0px; color: var(--lumi-sys-color--on-surface-default, #000000); }
+
+/* --- Segmented control --- */
+.lumi-segmented-group { display: flex; background-color: var(--lumi-sys-color--surface-container, #f2f0f0); padding: 4px; border-radius: var(--lumi-sys-shape--full, 999px); gap: 4px; }
+.lumi-segmented-btn { flex: 1 1 0%; padding: 8px 16px; border-width: medium; border-style: none; border-color: currentcolor; border-image: none; border-radius: var(--lumi-sys-shape--full, 999px); background-color: transparent; font-family: var(--ff-sans, sans-serif); font-size: 14px; font-weight: 510; cursor: pointer; color: var(--lumi-sys-color--on-surface-de-emphasis, rgba(0, 0, 0, 0.55)); transition: 0.2s; }
+.lumi-segmented-btn.is-active { background-color: var(--lumi-sys-color--surface-bright, #ffffff); color: var(--lumi-sys-color--on-surface-default, #000000); box-shadow: var(--lumi-sys-elevation--level1); }
+
+/* --- Tabs --- */
+.lumi-tab-group { display: flex; flex-direction: column; gap: var(--lumi-sys-spacing--4xl, 36px); width: 100%; }
+.lumi-tab-bar { display: flex; gap: var(--lumi-sys-spacing--l, 16px); padding-bottom: 0px; overflow-x: auto; scrollbar-width: none; }
+.lumi-tab-bar::-webkit-scrollbar { display: none; }
+.lumi-tab { height: 40px; padding: 0 var(--lumi-sys-spacing--xl, 20px); display: flex; align-items: center; justify-content: center; font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 17px; line-height: 24px; font-weight: 370; font-variation-settings: "wght" 370, "wdth" 92, "opsz" 17; color: var(--lumi-sys-color--on-surface-de-emphasis, rgba(0, 0, 0, 0.55)); background: transparent; border-width: medium; border-style: none; border-color: currentcolor; border-image: none; border-radius: var(--lumi-sys-shape--full, 999px); cursor: pointer; white-space: nowrap; transition: background-color 0.15s, color 0.15s; }
+.lumi-tab:hover { color: var(--lumi-sys-color--on-surface-default, #000000); }
+.lumi-tab.active { background-color: var(--lumi-sys-color--surface-container-high, #f2f0f0); color: var(--lumi-sys-color--on-surface-default, #000000); font-weight: 510; font-variation-settings: "wght" 510, "wdth" 92, "opsz" 17; }
+.lumi-tab-content { display: flex; flex-direction: column; gap: var(--lumi-sys-spacing--m, 12px); padding-top: 0px; padding-bottom: 0px; }
+.lumi-tab-content .lumi-body-l-emphasized, .lumi-tab-content .lumi-headline-s { margin: 0px; }
+.lumi-tab-content .lumi-body-l { margin: 0px; color: var(--lumi-sys-color--on-surface-default, #000000); }
+
+/* --- Callout / pullquote --- */
+.lumi-callout { display: flex; flex-direction: column; gap: var(--lumi-sys-spacing--xs, 4px); width: 100%; }
+.lumi-callout .lumi-body-l-emphasized { margin: 0px; }
+.lumi-pullquote { display: flex; gap: var(--lumi-sys-spacing--xl, 20px); width: 100%; margin: 0px; }
+.lumi-pullquote-mark { width: 30px; height: 22px; flex-shrink: 0; margin-top: 4px; color: var(--lumi-sys-color--on-surface-default, #000000); }
+.lumi-pullquote-body { display: flex; flex-direction: column; gap: var(--lumi-sys-spacing--l, 16px); flex: 1 1 0%; min-width: 0px; }
+p.lumi-pullquote-text, .lumi-pullquote-text { font-family: var(--ff-mono, 'Google Sans Code', monospace); font-style: italic; font-weight: 300; font-variation-settings: "wght" 300, "opsz" 22, "MONO" 0; color: var(--lumi-sys-color--on-surface-default, #000000); margin: 0px; font-size: 22px !important; line-height: 30px !important; }
+.lumi-pullquote-cite { display: flex; flex-direction: column; font-style: normal; }
+.lumi-pullquote-cite .lumi-de-emphasis { color: var(--lumi-sys-color--on-surface-de-emphasis, rgba(0, 0, 0, 0.55)); }
+
+/* --- Data table (simple) --- */
+.lumi-data-table-container { width: 100%; overflow-x: auto; border-radius: var(--lumi-sys-shape--medium, 12px); border: 1px solid var(--lumi-sys-color--stroke-default, rgba(0, 0, 0, 0.12)); }
+.lumi-data-table { width: 100%; border-collapse: collapse; font-family: var(--ff-sans, sans-serif); font-size: 14px; text-align: left; }
+.lumi-data-table th { padding: 12px 16px; font-weight: 600; background-color: var(--lumi-sys-color--surface-container, #f2f0f0); border-bottom: 1px solid var(--lumi-sys-color--stroke-default, rgba(0, 0, 0, 0.12)); color: var(--lumi-sys-color--on-surface-default, #000000); }
+.lumi-data-table td { padding: 12px 16px; border-bottom: 1px solid var(--lumi-sys-color--stroke-default, rgba(0, 0, 0, 0.12)); color: var(--lumi-sys-color--on-surface-default, #000000); }
+.lumi-data-table tr:last-child td { border-bottom-width: medium; border-bottom-style: none; border-bottom-color: currentcolor; }
+
+/* --- Table widget (prose-style) --- */
+.lumi-table-widget { display: flex; flex-direction: column; gap: var(--lumi-sys-spacing--xxl, 24px); width: 100%; }
+.lumi-table-title { margin: 0px; color: var(--lumi-sys-color--on-surface-default, #000000); }
+.lumi-table { width: 100%; border-collapse: collapse; font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); text-align: left; }
+.lumi-table th { padding: 12px 16px 12px 0px; font-size: 17px; line-height: 24px; font-weight: 540; font-variation-settings: "wght" 540, "wdth" 92, "opsz" 17; color: var(--lumi-sys-color--on-surface-default, #000000); border-bottom: 1px solid var(--lumi-sys-color--on-surface-low, rgba(0, 0, 0, 0.08)); }
+.lumi-table td { padding: 16px 16px 16px 0px; font-size: 17px; line-height: 24px; font-weight: 400; font-variation-settings: "wght" 400, "wdth" 92, "opsz" 17; color: var(--lumi-sys-color--on-surface-default, #000000); border-bottom: 1px solid var(--lumi-sys-color--on-surface-low, rgba(0, 0, 0, 0.08)); }
+.lumi-table td:last-child, .lumi-table th:last-child { padding-right: 0px; }
+.lumi-table tr.lumi-table-ellipsis-row td { padding: 16px 0px 0px; border-bottom-width: medium; border-bottom-style: none; border-bottom-color: currentcolor; color: var(--lumi-sys-color--on-surface-variant, rgba(0, 0, 0, 0.55)); }
+
+/* --- Code block --- */
+.lumi-code-block { background-color: var(--lumi-sys-color--code-background, #000000); border-radius: var(--lumi-sys-shape--xl-max, 40px); padding: 32px; display: flex; flex-direction: column; gap: var(--lumi-sys-spacing--l, 16px); width: 100%; box-sizing: border-box; }
+.lumi-code-header { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.lumi-code-lang { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 15px; font-weight: 500; font-variation-settings: "wght" 540, "wdth" 92, "opsz" 15; color: var(--lumi-sys-color--code-primary-text, #ffffff); }
+.lumi-code-copy { background: transparent; border-width: medium; border-style: none; border-color: currentcolor; border-image: none; color: var(--lumi-sys-color--code-primary-text, #ffffff); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; border-radius: var(--lumi-sys-shape--full, 999px); transition: background-color 0.2s; }
+.lumi-code-copy:hover { background-color: rgba(255, 255, 255, 0.1); }
+.lumi-code-snippet { margin: 0px; overflow-x: auto; width: 100%; }
+.lumi-code-snippet code { font-family: var(--ff-mono, 'Google Sans Code', monospace); font-size: 15px; line-height: 20px; color: var(--lumi-sys-color--code-primary-text, #ffffff); display: block; white-space: pre; }
+
+/* --- Section / prose --- */
+.lumi-section { display: flex; flex-direction: column; align-items: flex-start; width: 100%; }
+.lumi-section h1 { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 28px; line-height: 36px; font-weight: 350; font-variation-settings: "wght" 350, "wdth" 100, "opsz" 28; color: var(--lumi-sys-color--on-surface, #000000); margin-top: var(--lumi-sys-spacing--m, 12px); margin-bottom: var(--lumi-sys-spacing--xxl, 24px); }
+.lumi-section h1:first-child { margin-top: 0px; }
+.lumi-section h2 { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 24px; line-height: 28px; font-weight: 380; font-variation-settings: "wght" 380, "wdth" 100, "opsz" 24; color: var(--lumi-sys-color--on-surface, #000000); margin-top: var(--lumi-sys-spacing--m, 12px); margin-bottom: var(--lumi-sys-spacing--m, 12px); }
+.lumi-section h2:first-child { margin-top: 0px; }
+.lumi-section h3 { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 20px; line-height: 24px; font-weight: 470; font-variation-settings: "wght" 470, "wdth" 94, "opsz" 20; color: var(--lumi-sys-color--on-surface, #000000); margin-top: var(--lumi-sys-spacing--m, 12px); margin-bottom: var(--lumi-sys-spacing--xs, 4px); }
+.lumi-section h3:first-child { margin-top: 0px; }
+.lumi-section p { font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 17px; line-height: 24px; font-weight: 400; font-variation-settings: "wght" 400, "wdth" 92, "opsz" 17; color: var(--lumi-sys-color--on-surface, #000000); margin-top: 0px; margin-bottom: var(--lumi-sys-spacing--m, 12px); }
+.lumi-section p:last-child { margin-bottom: 0px; }
+.lumi-section ul { list-style: none; padding: 0px; margin: 0 0 var(--lumi-sys-spacing--m, 12px) 0; width: 100%; }
+.lumi-section ul:last-child { margin-bottom: 0px; }
+.lumi-section li { position: relative; padding-left: 40px; padding-bottom: 12px; font-family: var(--ff-sans, 'Google Sans Flex', sans-serif); font-size: 17px; line-height: 24px; font-weight: 400; font-variation-settings: "wght" 400, "wdth" 92, "opsz" 17; color: var(--lumi-sys-color--on-surface, #000000); box-sizing: border-box; }
+.lumi-section li:last-child { padding-bottom: 0px; }
+.lumi-section li::before { content: "○"; position: absolute; left: 3.5px; top: 0px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-family: var(--ff-mono, 'Google Sans Code', monospace); font-size: 15px; font-weight: 650; font-variation-settings: "MONO" 1, "wght" 650; color: var(--lumi-sys-color--on-surface, #000000); }
+.lumi-section li ul { margin-top: 12px; margin-bottom: 0px; padding-left: 40px; }
+
+/* --- Chart legend (1:1 series color match) --- */
+.lumi-chart-header, .lumi-chart-title { margin-bottom: 32px; }
+.lumi-chart-legend { display: flex; justify-content: center; align-items: center; gap: 24px; margin-top: 32px; padding-top: 0px; width: 100%; flex-wrap: wrap; }
+.lumi-legend-item { display: inline-flex; align-items: center; gap: 8px; }
+.lumi-legend-dot { width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.lumi-legend-dot-swatch { width: 20px; height: 20px; border-radius: 50%; display: block; }
+span.lumi-legend-dot[style*="background"] { width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
+.lumi-legend-label { font-family: var(--ff-mono, 'Google Sans Code', monospace); font-style: italic; font-size: 13px; font-weight: 400; line-height: 20px; color: var(--lumi-sys-color--on-surface, #000000); font-variation-settings: "MONO" 0; white-space: nowrap; }
+
+/* Canonical themed <select>. Uses element+class specificity (select.lumi-select)
+   so it intentionally wins over any model hand-rolled `.lumi-select` rule: the
+   runtime stylesheet is injected before widget <style> blocks, so a bare
+   `.lumi-select` (same specificity, later) would otherwise override it. This
+   provides appearance:none + a theme-neutral chevron so no native OS arrow leaks. */
+select.lumi-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  padding: var(--lumi-sys-spacing--s, 8px) 40px var(--lumi-sys-spacing--s, 8px)
+    var(--lumi-sys-spacing--m, 12px);
+  border: 1px solid var(--stroke-default);
+  border-radius: var(--r-full, 999px);
+  background-color: var(--surface);
+  color: var(--on-surface);
+  font-family: var(--ff-sans, 'Google Sans Flex', sans-serif);
+  font-size: 15px;
+  line-height: 20px;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2380868b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 14px;
+}
+select.lumi-select:focus-visible {
+  outline: 2px solid var(--lumi-sys-color--accent-fixed, #3186ff);
+  outline-offset: 2px;
+}
+
+/* Toggle / filter chip. Models frequently emit `<button class="lumi-chip">`
+   (or `.lumi-chip-btn`, `.lumi-filter-btn`, `[class^="lumi-chip-"]`, with
+   `.is-active`/`.active`/`.is-selected`) for toggle pills; without a
+   canonical rule these fall back to native (retro) browser button chrome.
+   Theme-aware via runtime tokens so it is correct in light and dark. */
+.lumi-chip,
+[class^="lumi-chip"],
+[class*=" lumi-chip"],
+[class^="lumi-pill"],
+[class*=" lumi-pill"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lumi-sys-spacing--s, 8px);
+  min-height: 32px;
+  padding: 0 16px;
+  font-family: var(--ff-sans, 'Google Sans Flex', 'Google Sans', sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--lumi-sys-color--on-surface-default, #1f1f1f);
+  background: var(--lumi-sys-color--surface-dim, #f2f0f0);
+  border: 1px solid transparent;
+  border-radius: var(--lumi-sys-shape--full, 999px);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  box-sizing: border-box;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.lumi-chip:hover,
+[class^="lumi-chip"]:hover,
+[class*=" lumi-chip"]:hover,
+[class^="lumi-pill"]:hover,
+[class*=" lumi-pill"]:hover {
+  background: var(--lumi-sys-color--surface-container-high, #e6e6e6);
+}
+.lumi-chip.is-active,
+.lumi-chip.active,
+.lumi-chip.is-selected,
+.lumi-chip.selected,
+.lumi-chip[aria-pressed="true"],
+.lumi-chip[aria-selected="true"],
+[class^="lumi-chip"].is-active,
+[class^="lumi-chip"].active,
+[class^="lumi-chip"].is-selected,
+[class^="lumi-chip"].selected,
+[class^="lumi-chip"][aria-pressed="true"],
+[class^="lumi-chip"][aria-selected="true"],
+[class*=" lumi-chip"].is-active,
+[class*=" lumi-chip"].active,
+[class*=" lumi-chip"].is-selected,
+[class*=" lumi-chip"].selected,
+[class^="lumi-pill"].is-active,
+[class^="lumi-pill"].active,
+[class*=" lumi-pill"].is-active,
+[class*=" lumi-pill"].active {
+  color: var(--lumi-sys-color--accent-fixed, #3186ff);
+  background: var(--lumi-sys-color--accent-container, rgba(49, 134, 255, 0.14));
+  border-color: transparent;
+  font-weight: 600;
+}
+.lumi-chip:focus-visible,
+[class^="lumi-chip"]:focus-visible,
+[class*=" lumi-chip"]:focus-visible,
+[class^="lumi-pill"]:focus-visible,
+[class*=" lumi-pill"]:focus-visible {
+  outline: 2px solid var(--lumi-sys-color--accent-fixed, #3186ff);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+ * DIAGRAM GUARD — SVG <text> is fill-only.
+ *   An inherited group stroke (e.g. `.node:hover { stroke }` on a <g>)
+ *   otherwise cascades into child <text>, thickening glyph outlines
+ *   (fake-bold) and recoloring the label. Highlight strokes belong on
+ *   shapes (rect/path); text never paints a stroke.
+ * ============================================================ */
+svg text { stroke: none; paint-order: fill; }
+
+</style>
+<style id="lumi-surface-button-fallbacks">
+.widget-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-inline: 0 !important;
+  box-sizing: border-box;
+}
+:root {
+  --lumi-sys-color--surface-translucent: rgba(255, 255, 255, 0.88);
+  --surface-translucent: var(--lumi-sys-color--surface-translucent, rgba(255, 255, 255, 0.88));
+  --surface-glass: var(--lumi-sys-color--surface-translucent, rgba(255, 255, 255, 0.88));
+}
+:root[data-theme="dark"], body.dark-mode {
+  --lumi-sys-color--surface-translucent: rgba(24, 24, 27, 0.88);
+  --surface-translucent: rgba(24, 24, 27, 0.88);
+  --surface-glass: rgba(24, 24, 27, 0.88);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --lumi-sys-color--surface-translucent: rgba(24, 24, 27, 0.88);
+    --surface-translucent: rgba(24, 24, 27, 0.88);
+    --surface-glass: rgba(24, 24, 27, 0.88);
+  }
+}
+button {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 8px 18px;
+  font-family: var(--ff-sans, 'Google Sans Flex', sans-serif);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  color: var(--on-surface, #000000);
+  background-color: var(--lumi-sys-color--surface-bright, #ffffff);
+  border: 1px solid var(--stroke-default, #e3e3e3);
+  border-radius: 999px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+button:hover {
+  background-color: var(--surface-container-high, #e6e6e6);
+}
+button.active, button.is-active, button.selected, button.is-selected, button[aria-pressed="true"], button[aria-selected="true"] {
+  background-color: var(--accent-container, #dcf1ff);
+  color: var(--accent-fixed, #3186ff);
+  border-color: transparent;
+}
+.lumi-btn, [class^="lumi-btn-"], [class*=" lumi-btn-"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 8px 18px;
+  background-color: var(--lumi-sys-color--surface-bright, #ffffff);
+  color: var(--on-surface, #000000);
+  border: 1px solid var(--stroke-default, #e3e3e3);
+  border-radius: 999px;
+  box-sizing: border-box;
+}
+.lumi-btn--primary, .lumi-btn-primary {
+  background-color: var(--lumi-sys-color--accent, #9dd2ff);
+  color: var(--lumi-sys-color--on-surface-default, #000000);
+  border-color: transparent;
+}
+.lumi-btn--primary:hover, .lumi-btn-primary:hover {
+  background-color: var(--lumi-sys-color--accent-container, #dcf1ff);
+}
+:where(.lumi-chip, [class^="lumi-chip"], [class*=" lumi-chip"], [class^="lumi-pill"], [class*=" lumi-pill"]) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0 16px;
+  font-family: var(--ff-sans, 'Google Sans Flex', sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--on-surface, #1f1f1f);
+  background: var(--surface-dim, #f2f0f0);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+}
+:where(.lumi-chip.is-active, .lumi-chip.active, [class^="lumi-chip"].is-active, [class^="lumi-chip"].active, [class*=" lumi-chip"].is-active, [class*=" lumi-chip"].active, [class^="lumi-pill"].is-active, [class^="lumi-pill"].active) {
+  color: var(--accent-fixed, #3186ff);
+  background: var(--accent-container, rgba(49, 134, 255, 0.14));
+  border-color: transparent;
+  font-weight: 600;
+}
+</style>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NPB 12球団ドラフト指名管理アプリ</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- SheetJS (xlsx) CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" onerror="console.warn('SheetJS failed to load')"></script>
+  <style>
+    /* Widget container glue */
+    .widget-container {
+      width: 100%;
+      min-height: 280px;
+      overflow-x: hidden;
+      font-family: var(--ff-sans, system-ui, -apple-system, sans-serif);
+      color: var(--on-surface, #1c1d1d);
+      background: transparent;
+    }
+
+    /* Modal Backdrop Blur & Transitions */
+    .modal-backdrop {
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+    }
+
+    /* Custom Scrollbar */
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: var(--surface-dim, #f2f0f0);
+      border-radius: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: var(--outline, #9a9b9c);
+      border-radius: 4px;
+    }
+
+    /* Theme adaptive overrides for dynamic inputs */
+    input, select, textarea {
+      background-color: var(--surface-bright, #ffffff);
+      color: var(--on-surface, #1c1d1d);
+      border-color: var(--stroke-default, #e3e3e3);
+    }
+    html[data-theme="dark"] input,
+    html[data-theme="dark"] select,
+    html[data-theme="dark"] textarea {
+      background-color: var(--surface-dim, #141414);
+      color: var(--on-surface, #e0e0e0);
+      border-color: var(--stroke-default, #2d2f38);
+    }
+  </style>
+<script id="lumi-os-theme-init">
+(function() {
+  function syncBody() {
+    var dt = document.documentElement.getAttribute('data-theme');
+    if (document.body && (dt === 'dark' || dt === 'light')) {
+      document.body.classList.toggle('dark-mode', dt === 'dark');
+    }
+  }
+  function syncTheme(theme) {
+    if (theme !== 'dark' && theme !== 'light') return;
+    document.documentElement.setAttribute('data-theme', theme);
+    syncBody();
+  }
+  if (typeof MutationObserver === 'function') {
+    new MutationObserver(syncBody).observe(document.documentElement, {
+      attributes: true, attributeFilter: ['data-theme']
+    });
+  }
+  if (typeof document.addEventListener === 'function') {
+    document.addEventListener('DOMContentLoaded', syncBody);
+  }
+  try {
+    var mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+    if (mq) {
+      var cur = document.documentElement.getAttribute('data-theme');
+      if (!cur) {
+        syncTheme(mq.matches ? 'dark' : 'light');
+      } else {
+        syncTheme(cur);
+      }
+      if (mq.addEventListener) {
+        mq.addEventListener('change', function(e) {
+          syncTheme(e.matches ? 'dark' : 'light');
+        });
+      }
+    }
+  } catch (e) {}
+  window.addEventListener('message', function(e) {
+    if (e.data && (e.data.type === 'set-theme' || e.data.type === 'APPLY_THEME') && e.data.theme) {
+      syncTheme(e.data.theme);
+    }
+  });
+})();
+</script>
+</head>
+<body class="bg-transparent m-0 p-0">
+  <div class="widget-container p-3 sm:p-5 max-w-7xl mx-auto">
+    
+    <!-- HEADER AREA -->
+    <header class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 mb-4 border-b border-[var(--stroke-default,#e3e3e3)]">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-[var(--accent-container,#dcf1ff)] text-[var(--accent-fixed,#3186ff)]">2025 Draft Sync</span>
+          <h1 class="text-xl font-bold tracking-tight text-[var(--on-surface,#1c1d1d)]">12球団別ドラフト指名管理</h1>
+        </div>
+        <p class="text-xs text-[var(--on-surface-variant,rgba(0,0,0,0.55))] mt-1">
+          候補選手のスカウト評価・詳細ノートの編集、12球団ごとの指名状況の一括管理 & Web検索
+        </p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap items-center gap-2">
+        <label class="lumi-btn text-xs px-3 py-1.5 rounded-full cursor-pointer inline-flex items-center gap-1.5 bg-[var(--surface-dim,#f2f0f0)] text-[var(--on-surface,#1c1d1d)] hover:bg-[var(--surface-container-high,#e6e6e6)] transition-colors border border-[var(--stroke-default,#e3e3e3)]">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d=" " fill="none"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" fill="none"></path></svg>
+          <span>Excel/CSV読込</span>
+          <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv" class="hidden" onchange="handleFileUpload(event)">
+        </label>
+
+        <button onclick="exportToExcel()" class="text-xs px-3 py-1.5 rounded-full inline-flex items-center gap-1.5 bg-[var(--surface-dim,#f2f0f0)] text-[var(--on-surface,#1c1d1d)] hover:bg-[var(--surface-container-high,#e6e6e6)] transition-colors border border-[var(--stroke-default,#e3e3e3)]">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" fill="none"></path></svg>
+          <span>Excel出力</span>
+        </button>
+
+        <button onclick="addNewPlayerModal()" class="text-xs px-3.5 py-1.5 rounded-full inline-flex items-center gap-1.5 bg-[var(--primary,#3186ff)] text-white font-medium hover:opacity-90 transition-opacity">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" fill="none"></path></svg>
+          <span>選手追加</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN TABS & NAVIGATION -->
+    <div class="flex items-center justify-between mb-4 border-b border-[var(--stroke-default,#e3e3e3)]">
+      <div class="flex gap-2">
+        <button id="tabBtnCandidates" onclick="switchMainTab('candidates')" class="px-4 py-2 text-sm font-semibold border-b-2 border-[var(--primary,#3186ff)] text-[var(--primary,#3186ff)] transition-colors">
+          候補選手一覧 (<span id="candidateCount">0</span>)
+        </button>
+        <button id="tabBtnDraftBoard" onclick="switchMainTab('draftBoard')" class="px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-[var(--on-surface-variant,rgba(0,0,0,0.55))] hover:text-[var(--on-surface,#1c1d1d)] transition-colors">
+          12球団指名ボード
+        </button>
+      </div>
+
+      <!-- Quick Reset Data -->
+      <button onclick="resetDefaultData()" class="text-xs text-[var(--on-surface-variant,rgba(0,0,0,0.55))] hover:text-red-500 underline transition-colors">
+        初期データに戻す
+      </button>
+    </div>
+
+    <!-- TAB 1: CANDIDATES VIEW -->
+    <div id="viewCandidates" class="block">
+      <!-- Search & Filters -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 mb-4 p-3 rounded-2xl bg-[var(--surface-dim,#f2f0f0)] border border-[var(--stroke-default,#e3e3e3)]">
+        <div>
+          <label class="block text-[10px] font-semibold text-[var(--on-surface-variant,rgba(0,0,0,0.55))] mb-1">キーワード検索</label>
+          <input type="text" id="filterKeyword" oninput="renderCandidates()" placeholder="選手名・所属など..." class="w-full text-xs px-2.5 py-1.5 rounded-lg border focus:outline-none focus:ring-1 focus:ring-[var(--primary,#3186ff)]">
+        </div>
+        <div>
+          <label class="block text-[10px] font-semibold text-[var(--on-surface-variant,rgba(0,0,0,0.55))] mb-1">守備位置</label>
+          <select id="filterPos" onchange="renderCandidates()" class="w-full text-xs px-2 py-1.5 rounded-lg border focus:outline-none focus:ring-1 focus:ring-[var(--primary,#3186ff)]">
+            <option value="ALL">すべて</option>
+            <option value="投手">投手</option>
+            <option value="捕手">捕手</option>
+            <option value="内野手">内野手</option>
+            <option value="外野手">外野手</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[10px] font-semibold text-[var(--on-surface-variant,rgba(0,0,0,0.55))] mb-1">スカウト評価</label>
+          <select id="filterRank" onchange="renderCandidates()" class="w-full text-xs px-2 py-1.5 rounded-lg border focus:outline-none focus:ring-1 focus:ring-[var(--primary,#3186ff)]">
+            <option value="ALL">すべて</option>
+            <option value="S">Sランク (超目玉)</option>
+            <option value="A">Aランク (1位候補)</option>
+            <option value="B">Bランク (上位候補)</option>
+            <option value="C">Cランク (本指名圏)</option>
+            <option value="D">Dランク (育成・調査)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[10px] font-semibold text-[var(--on-surface-variant,rgba(0,0,0,0.55))] mb-1">指名状況</label>
+          <select id="filterDraftState" onchange="renderCandidates()" class="w-full text-xs px-2 py-1.5 rounded-lg border focus:outline-none focus:ring-1 focus:ring-[var(--primary,#3186ff)]">
+            <option value="ALL">すべて</option>
+            <option value="UNASSIGNED">未指名のみ</option>
+            <option value="ASSIGNED">指名確定済み</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Candidate Grid Cards -->
+      <div id="candidateGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <!-- Dynamic Insertion -->
+      </div>
+    </div>
+
+    <!-- TAB 2: DRAFT BOARD VIEW -->
+    <div id="viewDraftBoard" class="hidden">
+      <!-- League Tabs -->
+      <div class="flex items-center gap-2 mb-3">
+        <button id="leagueCentralBtn" onclick="switchLeague('central')" class="px-3 py-1 rounded-full text-xs font-semibold bg-[var(--accent-container,#dcf1ff)] text-[var(--accent-fixed,#3186ff)]">
+          セ・リーグ (6球団)
+        </button>
+        <button id="leaguePacificBtn" onclick="switchLeague('pacific')" class="px-3 py-1 rounded-full text-xs font-semibold bg-[var(--surface-dim,#f2f0f0)] text-[var(--on-surface-variant,rgba(0,0,0,0.55))]">
+          パ・リーグ (6球団)
+        </button>
+      </div>
+
+      <!-- 12 Teams Matrix -->
+      <div id="teamsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <!-- Dynamic Teams Insertion -->
+      </div>
+    </div>
+
+    <!-- PLAYER DETAILS MODAL -->
+    <div id="playerModal" class="fixed inset-0 z-50 modal-backdrop hidden flex items-center justify-center p-3">
+      <div class="bg-[var(--surface-bright,#ffffff)] dark:bg-[#1c1c1c] w-full max-w-xl rounded-2xl shadow-2xl border border-[var(--stroke-default,#e3e3e3)] overflow-hidden flex flex-col max-h-[90vh]">
+        
+        <!-- Modal Header -->
+        <div class="p-4 border-b border-[var(--stroke-default,#e3e3e3)] flex items-center justify-between bg-[var(--surface-dim,#f2f0f0)]">
+          <div class="flex items-center gap-2">
+            <span id="modalRankBadge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500 text-white">Rank A</span>
+            <h2 id="modalTitle" class="text-lg font-bold text-[var(--on-surface,#1c1d1d)]">選手詳細プロフィール</h2>
+          </div>
+          <button onclick="closeModal()" class="text-[var(--on-surface-variant,rgba(0,0,0,0.55))] hover:text-[var(--on-surface,#1c1d1d)] p-1 rounded-lg">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" fill="none"></path></svg>
+          </button>
+        </div>
+
+        <!-- Modal Scrollable Body -->
+        <div class="p-4 overflow-y-auto custom-scroll space-y-4">
+          
+          <!-- Basic Editable Form -->
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-[var(--on-surface-variant,rgba(0,0,0,0.55))] mb-1">選手名 *</label>
+              <input type="text" id="modalInputName" class="w-full text-xs p-2 rounded-lg border focus:ring-1 focus:ring-[var(--primary,#3186ff)]" placeholder="例: 佐々木 朗希">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-[var(--on-surface-variant,rgba(0,0,0,0.55))] mb-1">所属 (高校/大学/社会人等)</label>
+              <input type="text" id="modalInputTeam" class="w-full text-xs p-2 rounded-lg border focus:ring-1 focus:ring-[var(--primary,#3186ff)]" placeholder="例: 明治大学">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-[var(--on-surface-variant,rgba(0,0,0,0.55))] mb-1">ポジション</label>
+              <select id="modalSelectPos" class="w-full text-xs p-2 rounded-lg border focus:ring-1 focus:ring-[var(--primary,#3186ff)]">
+                <option value="投手">投手</option>
+                <option value="捕手">捕手</option>
+                <option value="内野手">内野手</option>
+                <option value="外野手">外野手</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-[var(--on-surface-variant,rgba(0,0,0,0.55))] mb-1">スカウト評価ランク</label>
+              <select id="modalSelectRank" class="w-full text-xs p-2 rounded-lg border focus:ring-1 focus:ring-[var(--primary,#3186ff)]">
+                <option value="S">Sランク (競合超目玉)</option>
+                <option value="A">Aランク (1位指名級)</option>
+                <option value="B">Bランク (上位指名級)</option>
+                <option value="C">Cランク (本指名圏内)</option>
+                <option value="D">Dランク (下位・育成調査)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-[var(--on-surface-variant,rgba(0,0,0,0.55))] mb-1">投打</label>
+              <input type="text" id="modalInputThrowsR3" class="w-full text-xs p-2 rounded-lg border focus:ring-1 focus:ring-[var(--primary,#3186ff)]" placeholder="例: 右投右打">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-[var(--on-surface-variant,rgba(0,0,0,0.55))] mb-1">身長 / 体重</label>
+              <input type="text" id="modalInputHeightWeight" class="w-full text-xs p-2 rounded-lg border focus:ring-1 focus:ring-[var(--primary,#3186ff)]" placeholder="例: 185cm / 85kg">
+            </div>
+          </div>
+
+          <!-- Quick Web Search Section -->
+          <div class="p-3 rounded-xl bg-[var(--surface-dim,#f2f0f0)] border border-[var(--stroke-default,#e3e3e3)]">
+            <div class="text-[11px] font-bold text-[var(--on-surface-variant,rgba(0,0,0,0.55))] mb-2 flex items-center justify-between">
+              <span>ONE-TAP WEB SEARCH</span>
+              <span class="text-[10px] font-normal">別タブで検索結果を表示</span>
+            </div>
+            <div class="flex gap-2">
+              <button type="button" onclick="searchGoogle()" class="flex-1 py-1.5 px-3 rounded-lg text-xs font-medium bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-50 flex items-center justify-center gap-1.5 transition-colors shadow-sm">
+                <svg class="w-3.5 h-3.5 text-blue-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
+                <span>Googleで検索</span>
+              </button>
+              <button type="button" onclick="searchYouTube()" class="flex-1 py-1.5 px-3 rounded-lg text-xs font-medium bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-50 flex items-center justify-center gap-1.5 transition-colors shadow-sm">
+                <svg class="w-3.5 h-3.5 text-red-600" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                <span>YouTube動画検索</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Draft Assignment Selectors -->
+          <div class="p-3 rounded-xl bg-[var(--surface-dim,#f2f0f0)] border border-[var(--stroke-default,#e3e3e3)] grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-bold text-[var(--on-surface-variant,rgba(0,0,0,0.55))] mb-1">指名球団割り当て</label>
+              <select id="modalSelectDraftTeam" class="w-full text-xs p-2 rounded-lg border focus:ring-1 focus:ring-[var(--primary,#3186ff)]">
+                <option value="">未指名 (フリー)</option>
+                <option value="巨人">巨人</option>
+                <option value="阪神">阪神</option>
+                <option value="DeNA">DeNA</option>
+                <option value="広島">広島</option>
+                <option value="ヤクルト">ヤクルト</option>
+                <option value="中日">中日</option>
+                <option value="ソフトバンク">ソフトバンク</option>
+                <option value="日本ハム">日本ハム</option>
+                <option value="ロッテ">ロッテ</option>
+                <option value="オリックス">オリックス</option>
+                <option value="楽天">楽天</option>
+                <option value="西武">西武</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-[var(--on-surface-variant,rgba(0,0,0,0.55))] mb-1">指名順位</label>
+              <select id="modalSelectDraftRank" class="w-full text-xs p-2 rounded-lg border focus:ring-1 focus:ring-[var(--primary,#3186ff)]">
+                <option value="ドラフト1位">ドラフト1位</option>
+                <option value="ドラフト2位">ドラフト2位</option>
+                <option value="ドラフト3位">ドラフト3位</option>
+                <option value="ドラフト4位">ドラフト4位</option>
+                <option value="ドラフト5位">ドラフト5位</option>
+                <option value="育成1位">育成1位</option>
+                <option value="育成2位">育成2位</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Memos -->
+          <div>
+            <label class="block text-xs font-medium text-[var(--on-surface-variant,rgba(0,0,0,0.55))] mb-1">簡易特徴メモ</label>
+            <input type="text" id="modalInputMemo" class="w-full text-xs p-2 rounded-lg border focus:ring-1 focus:ring-[var(--primary,#3186ff)]" placeholder="例: 最速155km/hの本格派右腕">
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-[var(--on-surface-variant,rgba(0,0,0,0.55))] mb-1">詳細スカウトメモ・特長・課題</label>
+            <textarea id="modalTextareaDetail" rows="4" class="w-full text-xs p-2 rounded-lg border focus:ring-1 focus:ring-[var(--primary,#3186ff)]" placeholder="球速、変化球のキレ、打撃フォーム、スカウトコメント、将来性など"></textarea>
+          </div>
+
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="p-3 border-t border-[var(--stroke-default,#e3e3e3)] bg-[var(--surface-dim,#f2f0f0)] flex items-center justify-between">
+          <button type="button" onclick="deleteCurrentPlayer()" id="btnModalDelete" class="px-3 py-1.5 rounded-lg text-xs font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950 transition-colors">
+            選手を削除
+          </button>
+          <div class="flex gap-2">
+            <button type="button" onclick="closeModal()" class="px-4 py-1.5 rounded-lg text-xs font-medium bg-zinc-200 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-200 hover:opacity-90">
+              キャンセル
+            </button>
+            <button type="button" onclick="savePlayerFromModal()" class="px-5 py-1.5 rounded-lg text-xs font-semibold bg-[var(--primary,#3186ff)] text-white hover:opacity-90 transition-opacity">
+              保存する
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // --- APP STATE & INITIAL DATA ---
+    const NPB_TEAMS = [
+      { name: '巨人', league: 'central', color: '#f97316' },
+      { name: '阪神', league: 'central', color: '#eab308' },
+      { name: 'DeNA', league: 'central', color: '#0284c7' },
+      { name: '広島', league: 'central', color: '#dc2626' },
+      { name: 'ヤクルト', league: 'central', color: '#16a34a' },
+      { name: '中日', league: 'central', color: '#2563eb' },
+      { name: 'ソフトバンク', league: 'pacific', color: '#ca8a04' },
+      { name: '日本ハム', league: 'pacific', color: '#0284c7' },
+      { name: 'ロッテ', league: 'pacific', color: '#475569' },
+      { name: 'オリックス', league: 'pacific', color: '#1e3a8a' },
+      { name: '楽天', league: 'pacific', color: '#991b1b' },
+      { name: '西武', league: 'pacific', color: '#1d4ed8' },
+    ];
+
+    const DEFAULT_PLAYERS = [
+      {
+        id: 'p1',
+        name: '宗山 塁',
+        position: '内野手',
+        team: '明治大学',
+        throwsR3: '右投左打',
+        heightWeight: '175cm / 79kg',
+        rank: 'S',
+        memo: '大学屈指の遊撃手。高い守備力と広角打法。',
+        detailMemo: '守備範囲の広さと送球の安定感は即戦力プロレベル。打撃も広角に打ち分けられ、ドラフト1位で複数球団の競合が確実視される最高峰ショート。',
+        draftTeam: '楽天',
+        draftRank: 'ドラフト1位'
+      },
+      {
+        id: 'p2',
+        name: '金丸 夢斗',
+        position: '投手',
+        team: '関西大学',
+        throwsR3: '左投左打',
+        heightWeight: '177cm / 77kg',
+        rank: 'S',
+        memo: '最速154km/hの絶対的左腕エース。',
+        detailMemo: '圧倒的な制球力とノビのある直球、鋭いスライダーを誇る大学サウスポーNo.1。奪三振率が高く、1年目から先発ローテーション入りが期待される。',
+        draftTeam: '中日',
+        draftRank: 'ドラフト1位'
+      },
+      {
+        id: 'p3',
+        name: '西口 直人',
+        position: '投手',
+        team: '八戸学院大学',
+        throwsR3: '右投右打',
+        heightWeight: '184cm / 83kg',
+        rank: 'A',
+        memo: '本格派右腕。角度のある150km/h超のストレート。',
+        detailMemo: '長身から投げ下ろす角度抜群の直球とフォークボールが武器。空振りを奪える決め球があり、上位候補として評価が急上昇中。',
+        draftTeam: '',
+        draftRank: ''
+      },
+      {
+        id: 'p4',
+        name: '中村 優斗',
+        position: '投手',
+        team: '愛知工業大学',
+        throwsR3: '右投右打',
+        heightWeight: '176cm / 82kg',
+        rank: 'A',
+        memo: '最速159km/hの速球派右腕。',
+        detailMemo: '常時150km/h台を連発する圧巻の球威。リリーフ即戦力としても先発としても魅力十分。',
+        draftTeam: 'ヤクルト',
+        draftRank: 'ドラフト1位'
+      },
+      {
+        id: 'p5',
+        name: '石塚 裕惺',
+        position: '内野手',
+        team: '花咲徳栄高校',
+        throwsR3: '右投右打',
+        heightWeight: '181cm / 82kg',
+        rank: 'A',
+        memo: '高校生No.1大型スラッガー内野手。',
+        detailMemo: '長打力と柔らかい打撃技術を兼ね備えた大型ショート。将来の主軸候補として高評価。',
+        draftTeam: '巨人',
+        draftRank: 'ドラフト1位'
+      },
+      {
+        id: 'p6',
+        name: '箱山 遥人',
+        position: '捕手',
+        team: '健大高崎高校',
+        throwsR3: '右投右打',
+        heightWeight: '177cm / 84kg',
+        rank: 'B',
+        memo: '強肩強打の高校生屈指のキャッチャー。',
+        detailMemo: '二塁送球1.8秒台の強肩と甲子園優勝のリード面での実績。打者としても勝負強い。',
+        draftTeam: '',
+        draftRank: ''
+      },
+      {
+        id: 'p7',
+        name: '渡部 聖弥',
+        position: '外野手',
+        team: '大体大',
+        throwsR3: '右投右打',
+        heightWeight: '177cm / 88kg',
+        rank: 'A',
+        memo: '大学球界屈指の右の長距離砲。',
+        detailMemo: 'パワフルなスイングで長打を連発。三塁手・外野手をこなせるユーティリティさも魅力。',
+        draftTeam: '西武',
+        draftRank: 'ドラフト1位'
+      },
+      {
+        id: 'p8',
+        name: '麦谷 祐介',
+        position: '外野手',
+        team: '富士大学',
+        throwsR3: '右投左打',
+        heightWeight: '180cm / 81kg',
+        rank: 'B',
+        memo: '走攻守揃った高スペック外野手。',
+        detailMemo: '50m5秒8の俊足と高い打撃センス。広い守備範囲とパンチ力のある打撃がスカウトから高い評価。',
+        draftTeam: 'オリックス',
+        draftRank: 'ドラフト1位'
+      }
+    ];
+
+    let players = [];
+    let currentTab = 'candidates';
+    let currentLeague = 'central';
+    let editingPlayerId = null;
+
+    // --- INITIALIZATION ---
+    function initApp() {
+      const saved = localStorage.getItem('npb_draft_players_v1');
+      if (saved) {
+        try {
+          players = JSON.parse(saved);
+        } catch (e) {
+          players = [...DEFAULT_PLAYERS];
+        }
+      } else {
+        players = [...DEFAULT_PLAYERS];
+      }
+
+      renderCandidates();
+      renderDraftBoard();
+    }
+
+    function saveState() {
+      localStorage.setItem('npb_draft_players_v1', JSON.stringify(players));
+      renderCandidates();
+      renderDraftBoard();
+    }
+
+    function resetDefaultData() {
+      if (confirm('登録データを初期状態にリセットしますか？')) {
+        players = [...DEFAULT_PLAYERS];
+        saveState();
+      }
+    }
+
+    // --- TAB SWITCHING ---
+    function switchMainTab(tab) {
+      currentTab = tab;
+      const btnCand = document.getElementById('tabBtnCandidates');
+      const btnBoard = document.getElementById('tabBtnDraftBoard');
+      const viewCand = document.getElementById('viewCandidates');
+      const viewBoard = document.getElementById('viewDraftBoard');
+
+      if (tab === 'candidates') {
+        viewCand.classList.remove('hidden');
+        viewBoard.classList.add('hidden');
+        btnCand.className = "px-4 py-2 text-sm font-semibold border-b-2 border-[var(--primary,#3186ff)] text-[var(--primary,#3186ff)] transition-colors";
+        btnBoard.className = "px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-[var(--on-surface-variant,rgba(0,0,0,0.55))] hover:text-[var(--on-surface,#1c1d1d)] transition-colors";
+      } else {
+        viewCand.classList.add('hidden');
+        viewBoard.classList.remove('hidden');
+        btnBoard.className = "px-4 py-2 text-sm font-semibold border-b-2 border-[var(--primary,#3186ff)] text-[var(--primary,#3186ff)] transition-colors";
+        btnCand.className = "px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-[var(--on-surface-variant,rgba(0,0,0,0.55))] hover:text-[var(--on-surface,#1c1d1d)] transition-colors";
+      }
+    }
+
+    function switchLeague(league) {
+      currentLeague = league;
+      const btnC = document.getElementById('leagueCentralBtn');
+      const btnP = document.getElementById('leaguePacificBtn');
+
+      if (league === 'central') {
+        btnC.className = "px-3 py-1 rounded-full text-xs font-semibold bg-[var(--accent-container,#dcf1ff)] text-[var(--accent-fixed,#3186ff)]";
+        btnP.className = "px-3 py-1 rounded-full text-xs font-semibold bg-[var(--surface-dim,#f2f0f0)] text-[var(--on-surface-variant,rgba(0,0,0,0.55))]";
+      } else {
+        btnP.className = "px-3 py-1 rounded-full text-xs font-semibold bg-[var(--accent-container,#dcf1ff)] text-[var(--accent-fixed,#3186ff)]";
+        btnC.className = "px-3 py-1 rounded-full text-xs font-semibold bg-[var(--surface-dim,#f2f0f0)] text-[var(--on-surface-variant,rgba(0,0,0,0.55))]";
+      }
+      renderDraftBoard();
+    }
+
+    // --- RENDER CANDIDATES LIST ---
+    function renderCandidates() {
+      const keyword = (document.getElementById('filterKeyword')?.value || '').toLowerCase();
+      const posFilter = document.getElementById('filterPos')?.value || 'ALL';
+      const rankFilter = document.getElementById('filterRank')?.value || 'ALL';
+      const draftStateFilter = document.getElementById('filterDraftState')?.value || 'ALL';
+
+      const filtered = players.filter(p => {
+        const matchKw = p.name.toLowerCase().includes(keyword) || 
+                        p.team.toLowerCase().includes(keyword) || 
+                        (p.memo && p.memo.toLowerCase().includes(keyword));
+        const matchPos = (posFilter === 'ALL') || (p.position === posFilter);
+        const matchRank = (rankFilter === 'ALL') || (p.rank === rankFilter);
+        let matchDraftState = true;
+        if (draftStateFilter === 'UNASSIGNED') matchDraftState = !p.draftTeam;
+        if (draftStateFilter === 'ASSIGNED') matchDraftState = !!p.draftTeam;
+
+        return matchKw && matchPos && matchRank && matchDraftState;
+      });
+
+      document.getElementById('candidateCount').textContent = filtered.length;
+
+      const grid = document.getElementById('candidateGrid');
+      if (grid) grid.innerHTML = '';
+
+      if (filtered.length === 0) {
+        if (grid) grid.innerHTML = `
+          <div class="col-span-full py-12 text-center text-xs text-[var(--on-surface-variant,rgba(0,0,0,0.55))] bg-[var(--surface-dim,#f2f0f0)] rounded-xl">
+            該当するドラフト候補選手が見つかりません。
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(p => {
+        const card = document.createElement('div');
+        card.className = "p-3.5 rounded-xl border border-[var(--stroke-default,#e3e3e3)] bg-[var(--surface-bright,#ffffff)] dark:bg-[#1c1c1c] hover:border-[var(--primary,#3186ff)] hover:shadow-md transition-all cursor-pointer relative flex flex-col justify-between";
+        card.onclick = () => openPlayerModal(p.id);
+
+        const rankBadgeColor = getRankBadgeClass(p.rank);
+
+        if (card) card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md ${rankBadgeColor}">評価 ${p.rank}</span>
+              <span class="text-[11px] font-semibold text-[var(--on-surface-variant,rgba(0,0,0,0.55))]">${p.position} | ${p.throwsR3 || '投打未設定'}</span>
+            </div>
+            
+            <h3 class="text-sm font-bold text-[var(--on-surface,#1c1d1d)] mb-0.5 flex items-center justify-between">
+              <span>${escapeHtml(p.name)}</span>
+              <span class="text-[10px] font-normal text-zinc-400">${p.heightWeight || ''}</span>
+            </h3>
+
+            <div class="text-xs text-[var(--on-surface-variant,rgba(0,0,0,0.55))] mb-2 font-medium">
+              ${escapeHtml(p.team || '所属未記入')}
+            </div>
+
+            <p class="text-xs text-[var(--on-surface,#1c1d1d)] line-clamp-2 mb-3 bg-[var(--surface-dim,#f2f0f0)] p-2 rounded-lg text-[11px]">
+              ${escapeHtml(p.memo || 'メモ未登録')}
+            </p>
+          </div>
+
+          <div class="pt-2 border-t border-[var(--stroke-default,#e3e3e3)] flex items-center justify-between text-[11px]">
+            ${p.draftTeam ? `
+              <span class="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                ${p.draftTeam} (${p.draftRank || '指名'})
+              </span>
+            ` : `
+              <span class="text-zinc-400">指名状況: 未指名</span>
+            `}
+            <span class="text-[var(--primary,#3186ff)] text-[10px] font-semibold hover:underline">詳細・編集 →</span>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    // --- RENDER DRAFT BOARD (12 TEAMS) ---
+    function renderDraftBoard() {
+      const grid = document.getElementById('teamsGrid');
+      if (grid) grid.innerHTML = '';
+
+      const targetTeams = NPB_TEAMS.filter(t => t.league === currentLeague);
+
+      const ranksList = ['ドラフト1位', 'ドラフト2位', 'ドラフト3位', 'ドラフト4位', 'ドラフト5位', '育成1位'];
+
+      targetTeams.forEach(team => {
+        const teamCard = document.createElement('div');
+        teamCard.className = "rounded-xl border border-[var(--stroke-default,#e3e3e3)] bg-[var(--surface-bright,#ffffff)] dark:bg-[#1c1c1c] overflow-hidden flex flex-col";
+
+        // Team Header
+        const teamAssignedCount = players.filter(p => p.draftTeam === team.name).length;
+
+        if (teamCard) teamCard.innerHTML = `
+          <div class="px-3 py-2.5 flex items-center justify-between text-white" style="background-color: ${team.color};">
+            <span class="font-bold text-sm tracking-wide">${team.name} 指名リスト</span>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-black/20 font-mono">${teamAssignedCount}名 決定</span>
+          </div>
+          <div class="p-3 space-y-2 text-xs divide-y divide-[var(--stroke-default,#e3e3e3)]">
+            ${ranksList.map(rankName => {
+              const assignedPlayer = players.find(p => p.draftTeam === team.name && p.draftRank === rankName);
+              return `
+                <div class="pt-2 first:pt-0 flex items-center justify-between gap-2">
+                  <span class="w-20 font-semibold text-[10px] text-[var(--on-surface-variant,rgba(0,0,0,0.55))] shrink-0">${rankName}</span>
+                  ${assignedPlayer ? `
+                    <div onclick="openPlayerModal('${assignedPlayer.id}')" class="flex-1 bg-[var(--surface-dim,#f2f0f0)] hover:bg-[var(--accent-container,#dcf1ff)] p-1.5 rounded-lg border border-[var(--stroke-default,#e3e3e3)] cursor-pointer transition-colors flex items-center justify-between">
+                      <span class="font-bold text-xs">${escapeHtml(assignedPlayer.name)}</span>
+                      <span class="text-[10px] text-zinc-500">${assignedPlayer.position} (${assignedPlayer.team || ''})</span>
+                    </div>
+                  ` : `
+                    <div onclick="openAssignModalForTeam('${team.name}', '${rankName}')" class="flex-1 border border-dashed border-zinc-300 dark:border-zinc-700 hover:border-[var(--primary,#3186ff)] p-1.5 rounded-lg text-center text-zinc-400 hover:text-[var(--primary,#3186ff)] cursor-pointer transition-colors text-[11px]">
+                      + 選手を割り当て
+                    </div>
+                  `}
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+
+        grid.appendChild(teamCard);
+      });
+    }
+
+    function openAssignModalForTeam(teamName, rankName) {
+      // Find unassigned player or prompt
+      const unassigned = players.filter(p => !p.draftTeam);
+      if (unassigned.length === 0) {
+        alert('未指名の選手がいません。候補一覧から選手を新規登録してください。');
+        return;
+      }
+      openPlayerModal(unassigned[0].id);
+      document.getElementById('modalSelectDraftTeam').value = teamName;
+      document.getElementById('modalSelectDraftRank').value = rankName;
+    }
+
+    // --- MODAL FUNCTIONS ---
+    function openPlayerModal(playerId = null) {
+      editingPlayerId = playerId;
+      const modal = document.getElementById('playerModal');
+      modal.classList.remove('hidden');
+
+      if (playerId) {
+        const p = players.find(x => x.id === playerId);
+        if (!p) return;
+        document.getElementById('modalTitle').textContent = `${p.name} - プロフィール・スカウト評価`;
+        document.getElementById('modalInputName').value = p.name || '';
+        document.getElementById('modalInputTeam').value = p.team || '';
+        document.getElementById('modalSelectPos').value = p.position || '投手';
+        document.getElementById('modalSelectRank').value = p.rank || 'A';
+        document.getElementById('modalInputThrowsR3').value = p.throwsR3 || '';
+        document.getElementById('modalInputHeightWeight').value = p.heightWeight || '';
+        document.getElementById('modalSelectDraftTeam').value = p.draftTeam || '';
+        document.getElementById('modalSelectDraftRank').value = p.draftRank || 'ドラフト1位';
+        document.getElementById('modalInputMemo').value = p.memo || '';
+        document.getElementById('modalTextareaDetail').value = p.detailMemo || '';
+        document.getElementById('btnModalDelete').style.display = 'block';
+
+        updateModalRankBadge(p.rank);
+      } else {
+        // New player
+        document.getElementById('modalTitle').textContent = '新規候補選手の追加';
+        document.getElementById('modalInputName').value = '';
+        document.getElementById('modalInputTeam').value = '';
+        document.getElementById('modalSelectPos').value = '投手';
+        document.getElementById('modalSelectRank').value = 'B';
+        document.getElementById('modalInputThrowsR3').value = '右投右打';
+        document.getElementById('modalInputHeightWeight').value = '180cm / 80kg';
+        document.getElementById('modalSelectDraftTeam').value = '';
+        document.getElementById('modalSelectDraftRank').value = 'ドラフト1位';
+        document.getElementById('modalInputMemo').value = '';
+        document.getElementById('modalTextareaDetail').value = '';
+        document.getElementById('btnModalDelete').style.display = 'none';
+
+        updateModalRankBadge('B');
+      }
+    }
+
+    function addNewPlayerModal() {
+      openPlayerModal(null);
+    }
+
+    function updateModalRankBadge(rank) {
+      const badge = document.getElementById('modalRankBadge');
+      if (badge) badge.textContent = `Rank ${rank}`;
+      badge.className = `px-2.5 py-0.5 rounded-full text-xs font-bold text-white ${getRankBadgeClass(rank)}`;
+    }
+
+    document.getElementById('modalSelectRank').addEventListener('change', (e) => {
+      updateModalRankBadge(e.target.value);
+    });
+
+    function closeModal() {
+      document.getElementById('playerModal').classList.add('hidden');
+      editingPlayerId = null;
+    }
+
+    function savePlayerFromModal() {
+      const name = document.getElementById('modalInputName').value.trim();
+      if (!name) {
+        alert('選手名を入力してください');
+        return;
+      }
+
+      const team = document.getElementById('modalInputTeam').value.trim();
+      const pos = document.getElementById('modalSelectPos').value;
+      const rank = document.getElementById('modalSelectRank').value;
+      const throwsR3 = document.getElementById('modalInputThrowsR3').value.trim();
+      const heightWeight = document.getElementById('modalInputHeightWeight').value.trim();
+      const draftTeam = document.getElementById('modalSelectDraftTeam').value;
+      const draftRank = document.getElementById('modalSelectDraftRank').value;
+      const memo = document.getElementById('modalInputMemo').value.trim();
+      const detailMemo = document.getElementById('modalTextareaDetail').value.trim();
+
+      if (editingPlayerId) {
+        // Edit existing
+        const idx = players.findIndex(p => p.id === editingPlayerId);
+        if (idx !== -1) {
+          players[idx] = {
+            ...players[idx],
+            name,
+            team,
+            position: pos,
+            rank,
+            throwsR3,
+            heightWeight,
+            draftTeam,
+            draftRank: draftTeam ? draftRank : '',
+            memo,
+            detailMemo
+          };
+        }
+      } else {
+        // Add new
+        const newObj = {
+          id: 'p_' + Date.now(),
+          name,
+          team,
+          position: pos,
+          rank,
+          throwsR3,
+          heightWeight,
+          draftTeam,
+          draftRank: draftTeam ? draftRank : '',
+          memo,
+          detailMemo
+        };
+        players.unshift(newObj);
+      }
+
+      saveState();
+      closeModal();
+    }
+
+    function deleteCurrentPlayer() {
+      if (!editingPlayerId) return;
+      if (confirm('この選手をリストから削除してもよろしいですか？')) {
+        players = players.filter(p => p.id !== editingPlayerId);
+        saveState();
+        closeModal();
+      }
+    }
+
+    // --- ONE-TAP WEB SEARCH ---
+    function searchGoogle() {
+      const name = document.getElementById('modalInputName').value.trim();
+      const team = document.getElementById('modalInputTeam').value.trim();
+      if (!name) return;
+      const query = encodeURIComponent(`${name} ${team} ドラフト スカウト 評価`);
+      window.open(`https://www.google.com/search?q=${query}`, '_blank');
+    }
+
+    function searchYouTube() {
+      const name = document.getElementById('modalInputName').value.trim();
+      const team = document.getElementById('modalInputTeam').value.trim();
+      if (!name) return;
+      const query = encodeURIComponent(`${name} ${team} プレー集 投球 フォーム`);
+      window.open(`https://www.youtube.com/results?search_query=${query}`, '_blank');
+    }
+
+    // --- SHEETJS EXCEL / CSV IMPORT & EXPORT ---
+    function handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      if (typeof XLSX === 'undefined') {
+        alert('SheetJSライブラリが読み込めませんでした。');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[firstSheetName];
+          const jsonRows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+          if (jsonRows.length < 2) {
+            alert('ファイル内に有効なデータ行が見つかりませんでした。');
+            return;
+          }
+
+          // Parse Headers
+          const headers = jsonRows[0].map(h => String(h || '').trim());
+          let importedCount = 0;
+
+          for (let i = 1; i < jsonRows.length; i++) {
+            const row = jsonRows[i];
+            if (!row || row.length === 0) continue;
+
+            const rowData = {};
+            headers.forEach((h, colIdx) => {
+              rowData[h] = row[colIdx] ? String(row[colIdx]).trim() : '';
+            });
+
+            // Column Mapping
+            const name = rowData['選手名'] || rowData['氏名'] || rowData['名前'] || rowData['Name'];
+            if (!name) continue;
+
+            const pos = rowData['ポジション'] || rowData['守備位置'] || rowData['位置'] || '投手';
+            const team = rowData['所属'] || rowData['球団'] || rowData['学校/チーム'] || '';
+            const throwsR3 = rowData['投打'] || rowData['投げ打'] || '';
+            const heightWeight = rowData['身長体重'] || rowData['身長/体重'] || rowData['サイズ'] || '';
+            const rank = rowData['評価'] || rowData['ランク'] || rowData['スカウト評価'] || 'B';
+            const memo = rowData['メモ'] || rowData['特徴'] || '';
+            const detailMemo = rowData['詳細メモ'] || rowData['詳細評価'] || rowData['レポート'] || '';
+            const draftTeam = rowData['指名球団'] || '';
+            const draftRank = rowData['指名順位'] || 'ドラフト1位';
+
+            players.push({
+              id: 'p_imp_' + Date.now() + '_' + i,
+              name,
+              position: normalizePos(pos),
+              team,
+              throwsR3,
+              heightWeight,
+              rank: normalizeRank(rank),
+              memo,
+              detailMemo,
+              draftTeam,
+              draftRank
+            });
+
+            importedCount++;
+          }
+
+          saveState();
+          alert(`${importedCount} 件の選手データを正常に読み込みました。`);
+        } catch (err) {
+          console.error('File parsing error:', err);
+          alert('ファイルの解析に失敗しました。フォーマットをご確認ください。');
+        }
+      };
+
+      reader.readAsArrayBuffer(file);
+      event.target.value = ''; // Reset
+    }
+
+    function exportToExcel() {
+      if (typeof XLSX === 'undefined') {
+        alert('SheetJSライブラリが読み込めませんでした。');
+        return;
+      }
+
+      const exportRows = players.map(p => ({
+        '選手名': p.name,
+        '守備位置': p.position,
+        '所属': p.team,
+        '投打': p.throwsR3,
+        '身長/体重': p.heightWeight,
+        'スカウト評価': p.rank,
+        '指名球団': p.draftTeam || '未指名',
+        '指名順位': p.draftRank || '',
+        '簡易メモ': p.memo,
+        '詳細スカウト評価': p.detailMemo
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(exportRows);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "ドラフト候補・指名一覧");
+
+      XLSX.writeFile(workbook, `NPB_Draft_Data_${new Date().toISOString().slice(0,10)}.xlsx`);
+    }
+
+    // --- HELPER UTILS ---
+    function normalizePos(val) {
+      if (val.includes('捕')) return '捕手';
+      if (val.includes('内')) return '内野手';
+      if (val.includes('外')) return '外野手';
+      return '投手';
+    }
+
+    function normalizeRank(val) {
+      const u = val.toUpperCase();
+      if (['S', 'A', 'B', 'C', 'D'].includes(u)) return u;
+      return 'B';
+    }
+
+    function getRankBadgeClass(rank) {
+      switch (rank) {
+        case 'S': return 'bg-red-600 text-white';
+        case 'A': return 'bg-amber-500 text-white';
+        case 'B': return 'bg-blue-600 text-white';
+        case 'C': return 'bg-emerald-600 text-white';
+        default: return 'bg-zinc-500 text-white';
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // --- AUTO RESIZE & THEME SYNC ---
+    const applyTheme = t => { 
+      document.documentElement.setAttribute('data-theme', t); 
+      if (t === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    };
+
+    if (!document.documentElement.hasAttribute('data-theme') && window.matchMedia?.('(prefers-color-scheme: dark)').matches) {
+      applyTheme('dark');
+    }
+
+    window.addEventListener('message', e => { 
+      if (e.data?.type === 'set-theme' || e.data?.type === 'APPLY_THEME') {
+        applyTheme(e.data.theme); 
+      }
+    });
+
+    (function autoResize() {
+      function notifyHeight() {
+        const c = document.querySelector('.widget-container') || document.body;
+        if (!c) return;
+        const h = Math.ceil(Math.max(c.getBoundingClientRect().bottom, c.scrollHeight));
+        window.parent.postMessage({type: 'widget-resize', height: h}, '*');
+      }
+      window.addEventListener('load', () => setTimeout(notifyHeight, 120));
+      new ResizeObserver(() => notifyHeight()).observe(document.querySelector('.widget-container') || document.body);
+    })();
+
+    // Start App
+    initApp();
+  </script>
+
+<script>/*luminous-slider-normalizer*/(function(){function f(r){if(!r||r.type!=='range')return;var mn=parseFloat(r.min||'0'),mx=parseFloat(r.max||'100'),v=parseFloat(r.value);if(isNaN(v))v=(mn+mx)/2;var p=mx>mn?((v-mn)/(mx-mn))*100:50;r.style.setProperty('--progress',p+'%');r.style.removeProperty('--slider-fill');}function all(){document.querySelectorAll('input[type="range"], .lumi-slider').forEach(f);}document.addEventListener('input',function(e){f(e.target);});if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',all);else all();})();</script>
+</body>
+</html>
